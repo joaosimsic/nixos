@@ -1,3 +1,4 @@
 [submodule "home/dotfiles"]
 	path = home/dotfiles
 	url = git@github.com:joaosimsic/dotfiles.git
+	branch = nixos
