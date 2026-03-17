@@ -1,4 +1,4 @@
-[submodule "home/dotfiles"]
-	path = home/dotfiles
+[submodule "dotfiles"]
+	path = dotfiles
 	url = git@github.com:joaosimsic/dotfiles.git
 	branch = nixos
