@@ -16,7 +16,7 @@
   users.users.${userConfig.username} = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" "video" ];
-    initialPassword = "changeme";  # Change on first login with: passwd
+    initialPassword = "changeme"; 
   };
 
   programs.hyprland.enable = true;
@@ -24,6 +24,7 @@
   environment.systemPackages = with pkgs; [
     git
     wget
+    ghostty  # Fallback terminal in case Home Manager fails
   ];
 
   security.rtkit.enable = true;
