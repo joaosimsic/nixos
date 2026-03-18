@@ -1,11 +1,7 @@
 { pkgs, config, ... }:
 
 {
-  wayland.windowManager.hyprland = {
-    enable = true;
-    systemd.enable = true;
-    xwayland.enable = true;
-  };
+  wayland.windowManager.hyprland.enable = false;
 
   xdg.configFile."hypr" = {
     source = config.lib.file.mkOutOfStoreSymlink "/home/joao/proj/nixos/home/dotfiles/.config/hypr";
@@ -28,6 +24,7 @@
   };
 
   home.packages = with pkgs; [
+    hyprland
     waybar
     hyprpaper
     mako
