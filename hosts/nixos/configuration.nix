@@ -1,17 +1,19 @@
-{ config, pkgs, ... }:
+{ config, pkgs, hostname, userConfig, ... }:
 
 {
   imports = [
     ./hardware-configuration.nix
   ];
 
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos";
+  networking.hostName = hostname;
   networking.networkmanager.enable = true;
 
-  users.users.joao = {
+  users.users.${userConfig.username} = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" "video" ];
   };

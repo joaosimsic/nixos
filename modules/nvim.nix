@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, nixosConfigPath, ... }:
 
 {
   programs.neovim = {
@@ -9,6 +9,6 @@
   };
 
   xdg.configFile."nvim" = {
-    source = config.lib.file.mkOutOfStoreSymlink "/home/joao/proj/nixos/dotfiles/.config/nvim";
+    source = config.lib.file.mkOutOfStoreSymlink "${nixosConfigPath}/dotfiles/.config/nvim";
   };
 }

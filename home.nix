@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, userConfig, ... }:
 
 {
   imports = [
@@ -6,8 +6,8 @@
     ./modules/hyprland.nix
   ];
 
-  home.username = "joao";
-  home.homeDirectory = "/home/joao";
+  home.username = userConfig.username;
+  home.homeDirectory = userConfig.homeDirectory;
   home.stateVersion = "24.05";
 
   programs.home-manager.enable = true;
