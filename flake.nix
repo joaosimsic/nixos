@@ -41,6 +41,9 @@
           ./hosts/${hostname}/configuration.nix
           home-manager.nixosModules.home-manager
           {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
             home-manager.extraSpecialArgs = { 
               inherit inputs nixosConfigPath;
               userConfig = hostConfig.user;
