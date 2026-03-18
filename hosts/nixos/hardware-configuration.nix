@@ -3,6 +3,7 @@
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
+    (modulesPath + "/profiles/all-hardware.nix") 
   ];
 
   boot.initrd.availableKernelModules = [ ];
