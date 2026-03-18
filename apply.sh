@@ -1,9 +1,15 @@
 #!/usr/bin/env bash
 
-nixos-generate-config --show-hardware-config > hardware-configuration.nix
+HOSTNAME=$(hostname)
+HOST_DIR="hosts/$HOSTNAME"
 
-git add hardware-configuration.nix
+# Initialize host if it doesn't exist
+if [ ! -d "$HOST_DIR" ]; then
+  echo "Host '$HOSTNAME' not found. Initializing..."
+  ./init-host.sh
+  echo ""
+  echo "Please edit $HOST_DIR/configuration.nix and add '$HOSTNAME' to flake.nix, then run ./apply.sh again."
+  exit 0
+fi
 
-sudo nixos-rebuild boot --flake .#nixos
-
-echo "Done! Reboot to test the new hardware config."
+sudo nixos-rebuild switch --flake .#"$HOSTNAME"
