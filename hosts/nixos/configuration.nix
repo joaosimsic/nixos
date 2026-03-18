@@ -30,5 +30,8 @@
     pulse.enable = true;
   };
 
+  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.wayland.enable = true;
+
   system.stateVersion = "24.05";
 }
