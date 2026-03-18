@@ -5,9 +5,6 @@
     enable = true;
     systemd.enable = true;
     xwayland.enable = true;
-    extraConfig = ''
-      source = /home/joao/proj/nixos/home/dotfiles/.config/hypr/hyprland.conf
-    '';
   };
 
   xdg.configFile."hypr" = {
@@ -16,7 +13,7 @@
 
   xdg.configFile."waybar" = {
     source = config.lib.file.mkOutOfStoreSymlink "/home/joao/proj/nixos/home/dotfiles/.config/waybar";
-  };
+    };
 
   xdg.configFile."wofi" = {
     source = config.lib.file.mkOutOfStoreSymlink "/home/joao/proj/nixos/home/dotfiles/.config/wofi";
