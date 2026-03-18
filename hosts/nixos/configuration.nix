@@ -16,6 +16,7 @@
   users.users.${userConfig.username} = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" "video" ];
+    initialPassword = "changeme";  # Change on first login with: passwd
   };
 
   programs.hyprland.enable = true;
