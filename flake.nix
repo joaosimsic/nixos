@@ -28,6 +28,10 @@
         system = "x86_64-linux";
         user = defaultUser;
       };
+      work = {
+        system = "x86_64-linux";
+        user = defaultUser;
+      };
     };
 
     mkHost = hostname: hostConfig: 
