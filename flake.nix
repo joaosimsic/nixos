@@ -21,10 +21,10 @@
       homeDirectory = "/home/joao";
     };
     
-    nixosConfigPath = "/home/joao/nixos";
+    nixosConfigPath = builtins.toString ./.;
 
     hosts = {
-      nixos = {
+      personal = {
         system = "x86_64-linux";
         user = defaultUser;
       };
