@@ -1,5 +1,21 @@
 { pkgs, config, nixosConfigPath, ... }:
 
+let
+  toggle-crt = pkgs.writeShellScriptBin "toggle-crt" ''
+    SHADER_PATH="$HOME/.config/hypr/shaders/crt-amber.glsl"
+    STATE_FILE="/tmp/hypr-crt-shader-state"
+
+    if [ -f "$STATE_FILE" ]; then
+        hyprctl keyword decoration:screen_shader ""
+        rm "$STATE_FILE"
+        notify-send -t 1500 "CRT MODE" "DISABLED" -h string:x-canonical-private-synchronous:crt
+    else
+        hyprctl keyword decoration:screen_shader "$SHADER_PATH"
+        touch "$STATE_FILE"
+        notify-send -t 1500 "CRT MODE" "ENABLED" -h string:x-canonical-private-synchronous:crt
+    fi
+  '';
+in
 {
   wayland.windowManager.hyprland.enable = false;
 
@@ -27,11 +43,6 @@
     source = config.lib.file.mkOutOfStoreSymlink "${nixosConfigPath}/dotfiles/.config/starship.toml";
   };
 
-  home.file.".local/bin/toggle-crt" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${nixosConfigPath}/dotfiles/.local/bin/toggle-crt";
-    executable = true;
-  };
-
   home.packages = with pkgs; [
     hyprland
     waybar
@@ -44,5 +55,7 @@
     brightnessctl
     ghostty
     thunar
+    libnotify
+    toggle-crt
   ];
 }
