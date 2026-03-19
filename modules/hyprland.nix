@@ -23,6 +23,15 @@
     source = config.lib.file.mkOutOfStoreSymlink "${nixosConfigPath}/dotfiles/.config/ghostty";
   };
 
+  xdg.configFile."starship.toml" = {
+    source = config.lib.file.mkOutOfStoreSymlink "${nixosConfigPath}/dotfiles/.config/starship.toml";
+  };
+
+  home.file.".local/bin/toggle-crt" = {
+    source = config.lib.file.mkOutOfStoreSymlink "${nixosConfigPath}/dotfiles/.local/bin/toggle-crt";
+    executable = true;
+  };
+
   home.packages = with pkgs; [
     hyprland
     waybar
