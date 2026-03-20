@@ -2,11 +2,14 @@
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    (modulesPath + "/profiles/all-hardware.nix")
   ];
 
-  boot.initrd.availableKernelModules = [ ];
-  boot.kernelModules = [ ];
+  boot.initrd.availableKernelModules = [
+    "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod"
+  ];
+  boot.kernelModules = [ "kvm-amd" ];
+
+  hardware.enableRedistributableFirmware = true;
 
   fileSystems."/" = {
     device = "/dev/disk/by-label/nixos";
