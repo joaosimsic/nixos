@@ -43,6 +43,14 @@ in
     source = config.lib.file.mkOutOfStoreSymlink "${nixosConfigPath}/dotfiles/.config/starship.toml";
   };
 
+  home.pointerCursor = {
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Amber";
+    size = 16;
+    gtk.enable = true;
+    x11.enable = true;
+  };
+
   home.packages = with pkgs; [
     hyprland
     waybar
