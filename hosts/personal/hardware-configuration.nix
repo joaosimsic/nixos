@@ -12,12 +12,12 @@
   hardware.enableRedistributableFirmware = true;
 
   fileSystems."/" = {
-    device = "/dev/disk/by-label/nixos";
+    device = "/dev/disk/by-label/root";
     fsType = "ext4";
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-label/boot";
+    device = "/dev/vda1";
     fsType = "vfat";
   };
 }
