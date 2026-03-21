@@ -17,7 +17,7 @@ let
   '';
 in
 {
-  wayland.windowManager.hyprland.enable = true;
+  wayland.windowManager.hyprland.enable = false;
 
   xdg.configFile."hypr" = {
     source = config.lib.file.mkOutOfStoreSymlink "${nixosConfigPath}/dotfiles/.config/hypr";

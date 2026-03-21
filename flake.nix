@@ -32,6 +32,10 @@
         system = "x86_64-linux";
         user = defaultUser;
       };
+      vm = {
+        system = "x86_64-linux";
+        user = defaultUser;
+      };
     };
 
     mkHost = hostname: hostConfig: 
