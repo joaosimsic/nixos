@@ -1,4 +1,3 @@
-# Desktop environment packages and settings
 
 { pkgs, ... }:
 
@@ -19,7 +18,6 @@ let
   '';
 in
 {
-  # Cursor theme
   home.pointerCursor = {
     package = pkgs.bibata-cursors;
     name = "Bibata-Modern-Amber";
@@ -28,26 +26,26 @@ in
     x11.enable = true;
   };
 
+  fonts.fontconfig.enable = true;
+
   home.packages = with pkgs; [
-    # Hyprland ecosystem
+    nerd-fonts.jetbrains-mono
+    
     hyprland
     hyprpaper
     waybar
     wofi
     mako
     
-    # Utilities
     grim
     slurp
     wl-clipboard
     brightnessctl
     libnotify
     
-    # Apps
     ghostty
     thunar
     
-    # Scripts
     toggle-crt
   ];
 }
