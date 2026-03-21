@@ -1,9 +1,6 @@
 { config, pkgs, lib, userConfig, monitors, ... }:
 
 let
-  dotfilesPath = "${userConfig.homeDirectory}/nixos/dotfiles";
-  mkSymlink = path: config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/${path}";
-
   commonModules = {
     "hyprland/submap" = {
       format = " RESIZE";
@@ -144,13 +141,5 @@ let
 
 in
 {
-  programs.waybar = {
-    enable = true;
-    settings = [ primaryBar secondaryBar ];
-  };
-
-  xdg.configFile = {
-    "waybar/style.css".source = mkSymlink ".config/waybar/style.css";
-    "waybar/colors.css".source = mkSymlink ".config/waybar/colors.css";
-  };
+  xdg.configFile."waybar/config".text = builtins.toJSON [ primaryBar secondaryBar ];
 }
