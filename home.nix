@@ -1,4 +1,4 @@
-{ config, pkgs, userConfig, ... }:
+{ config, pkgs, userConfig, inputs, ... }:
 
 {
   imports = [
@@ -7,6 +7,7 @@
     ./modules/shell.nix
     ./modules/nvim.nix
     ./modules/waybar.nix
+    inputs.walker.homeManagerModules.default
   ];
 
   home.username = userConfig.username;
@@ -15,4 +16,9 @@
 
   programs.home-manager.enable = true;
   programs.firefox.enable = true;
+
+  programs.walker = {
+    enable = true;
+    runAsService = true;
+  };
 }
