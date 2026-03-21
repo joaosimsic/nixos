@@ -1,6 +1,8 @@
-{ pkgs, config, nixosConfigPath, ... }:
+{ pkgs, config, userConfig, ... }:
 
 let
+  dotfilesPath = "${userConfig.homeDirectory}/nixos/dotfiles";
+
   toggle-crt = pkgs.writeShellScriptBin "toggle-crt" ''
     SHADER_PATH="$HOME/.config/hypr/shaders/crt-amber.glsl"
     STATE_FILE="/tmp/hypr-crt-shader-state"
@@ -20,27 +22,27 @@ in
   wayland.windowManager.hyprland.enable = false;
 
   xdg.configFile."hypr" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${nixosConfigPath}/dotfiles/.config/hypr";
+    source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/hypr";
   };
 
   xdg.configFile."waybar" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${nixosConfigPath}/dotfiles/.config/waybar";
+    source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/waybar";
   };
 
   xdg.configFile."wofi" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${nixosConfigPath}/dotfiles/.config/wofi";
+    source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/wofi";
   };
 
   xdg.configFile."mako" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${nixosConfigPath}/dotfiles/.config/mako";
+    source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/mako";
   };
 
   xdg.configFile."ghostty" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${nixosConfigPath}/dotfiles/.config/ghostty";
+    source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/ghostty";
   };
 
   xdg.configFile."starship.toml" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${nixosConfigPath}/dotfiles/.config/starship.toml";
+    source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/starship.toml";
   };
 
   home.pointerCursor = {
