@@ -139,7 +139,16 @@ let
     };
   } // commonModules;
 
+  dotfilesWaybar = "${userConfig.homeDirectory}/nixos/dotfiles/.config/waybar";
+
 in
 {
   xdg.configFile."waybar/config".text = builtins.toJSON [ primaryBar secondaryBar ];
+
+  home.activation.waybarCss = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    if [ -f "${dotfilesWaybar}/style.css" ]; then
+      cp "${dotfilesWaybar}/style.css" "${userConfig.homeDirectory}/.config/waybar/style.css"
+      cp "${dotfilesWaybar}/colors.css" "${userConfig.homeDirectory}/.config/waybar/colors.css"
+    fi
+  '';
 }
