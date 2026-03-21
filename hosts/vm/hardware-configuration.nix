@@ -14,7 +14,7 @@
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-label/boot";
+    device = "/dev/vda1";
     fsType = "vfat";
   };
 }
