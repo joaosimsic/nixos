@@ -26,6 +26,8 @@
     initialPassword = lib.mkDefault "changeme";
   };
 
+  users.users.root.initialPassword = "changeme";
+
   security.rtkit.enable = true;
 
   services.pipewire = {
