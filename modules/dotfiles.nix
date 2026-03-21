@@ -16,5 +16,6 @@ in
     "ghostty".source = mkSymlink ".config/ghostty";
     "nushell".source = mkSymlink ".config/nushell";
     "starship.toml".source = mkSymlink ".config/starship.toml";
+    "zellij".source = mkSymlink ".config/zellij";
   };
 }

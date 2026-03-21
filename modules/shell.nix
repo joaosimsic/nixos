@@ -10,5 +10,6 @@
     fzf
     bat
     eza
+    zellij
   ];
 }
