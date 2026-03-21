@@ -34,6 +34,7 @@ in
     hyprland
     hyprpaper
     waybar
+    walker
     wofi
     mako
     
