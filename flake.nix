@@ -46,20 +46,22 @@
           userConfig = hostConfig.user;
         };
         modules = [
+          ./modules/monitors.nix
           ./hosts/${hostname}/configuration.nix
           home-manager.nixosModules.home-manager
-          {
+          ({ config, ... }: {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "backup";
             home-manager.extraSpecialArgs = { 
               inherit inputs nixosConfigPath;
               userConfig = hostConfig.user;
+              monitors = config.monitors;
             };
             home-manager.users.${hostConfig.user.username} = {
               imports = [ ./home.nix ];
             };
-          }
+          })
         ];
       };
 

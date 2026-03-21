@@ -27,5 +27,10 @@
 
   services.fstrim.enable = true;
 
+  monitors = {
+    primary = "DP-1";
+    secondary = "HDMI-A-2";
+  };
+
   system.stateVersion = "24.11";
 }

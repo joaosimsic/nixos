@@ -6,6 +6,7 @@
     ./modules/desktop.nix
     ./modules/shell.nix
     ./modules/nvim.nix
+    ./modules/waybar.nix
   ];
 
   home.username = userConfig.username;

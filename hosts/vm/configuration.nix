@@ -14,6 +14,11 @@
   services.qemuGuest.enable = true;
   services.spice-vdagentd.enable = true;
 
+  monitors = {
+    primary = "Virtual-1";
+    secondary = "Virtual-2";
+  };
+
   services.xserver.videoDrivers = [ "modesetting" ];
 
   hardware.graphics.enable = true;
