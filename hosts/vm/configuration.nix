@@ -14,9 +14,11 @@
   services.qemuGuest.enable = true;
   services.spice-vdagentd.enable = true;
 
+  services.xserver.videoDrivers = [ "modesetting" ];
+
+  hardware.graphics.enable = true;
+
   environment.sessionVariables = {
-    WLR_RENDERER_ALLOW_SOFTWARE = "1";
-    LIBGL_ALWAYS_SOFTWARE = "1";
     WLR_NO_HARDWARE_CURSORS = "1";
   };
 
