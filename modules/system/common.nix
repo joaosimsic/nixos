@@ -1,15 +1,13 @@
 { config, lib, pkgs, userConfig, ... }:
 {
-  # Keyboard layout (can be overridden in host modules via mkForce/mkDefault).
   console.keyMap = lib.mkDefault "br-abnt2";
   services.xserver.xkb = {
     layout = lib.mkDefault "br";
     variant = lib.mkDefault "abnt2";
   };
 
-  # Locale/time defaults (can be overridden per-host).
   time.timeZone = lib.mkDefault "America/Sao_Paulo";
-  i18n.defaultLocale = lib.mkDefault "pt_BR.UTF-8";
+  i18n.defaultLocale = lib.mkDefault "en_US.UTF-8";
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
