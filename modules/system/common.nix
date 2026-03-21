@@ -25,7 +25,7 @@
     shell = pkgs.nushell;
   };
 
-  programs.nushell.enable = true;
+  environment.shells = [ pkgs.nushell ];
 
   users.users.root.initialPassword = "changeme";
 
