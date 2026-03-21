@@ -10,6 +10,7 @@ in
 {
   xdg.configFile = {
     "hypr".source = mkSymlink ".config/hypr";
+    "walker".source = mkSymlink ".config/walker";
     "wofi".source = mkSymlink ".config/wofi";
     "mako".source = mkSymlink ".config/mako";
     "ghostty".source = mkSymlink ".config/ghostty";
