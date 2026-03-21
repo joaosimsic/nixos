@@ -2,8 +2,10 @@
 
 {
   imports = [
+    ./modules/dotfiles.nix
+    ./modules/desktop.nix
+    ./modules/shell.nix
     ./modules/nvim.nix
-    ./modules/hyprland.nix
   ];
 
   home.username = userConfig.username;

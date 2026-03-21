@@ -22,7 +22,10 @@
     description = userConfig.username;
     extraGroups = [ "wheel" "networkmanager" "video" "audio" ];
     initialPassword = lib.mkDefault "changeme";
+    shell = pkgs.nushell;
   };
+
+  programs.nushell.enable = true;
 
   users.users.root.initialPassword = "changeme";
 

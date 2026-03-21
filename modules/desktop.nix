@@ -1,8 +1,8 @@
-{ pkgs, config, userConfig, ... }:
+# Desktop environment packages and settings
+
+{ pkgs, ... }:
 
 let
-  dotfilesPath = "${userConfig.homeDirectory}/nixos/dotfiles";
-
   toggle-crt = pkgs.writeShellScriptBin "toggle-crt" ''
     SHADER_PATH="$HOME/.config/hypr/shaders/crt-amber.glsl"
     STATE_FILE="/tmp/hypr-crt-shader-state"
@@ -19,32 +19,7 @@ let
   '';
 in
 {
-  wayland.windowManager.hyprland.enable = false;
-
-  xdg.configFile."hypr" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/hypr";
-  };
-
-  xdg.configFile."waybar" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/waybar";
-  };
-
-  xdg.configFile."wofi" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/wofi";
-  };
-
-  xdg.configFile."mako" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/mako";
-  };
-
-  xdg.configFile."ghostty" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/ghostty";
-  };
-
-  xdg.configFile."starship.toml" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/starship.toml";
-  };
-
+  # Cursor theme
   home.pointerCursor = {
     package = pkgs.bibata-cursors;
     name = "Bibata-Modern-Amber";
@@ -54,18 +29,25 @@ in
   };
 
   home.packages = with pkgs; [
+    # Hyprland ecosystem
     hyprland
-    waybar
     hyprpaper
-    mako
+    waybar
     wofi
+    mako
+    
+    # Utilities
     grim
     slurp
     wl-clipboard
     brightnessctl
+    libnotify
+    
+    # Apps
     ghostty
     thunar
-    libnotify
+    
+    # Scripts
     toggle-crt
   ];
 }
