@@ -1,4 +1,4 @@
-{ config, pkgs, lib, userConfig, monitors, ... }:
+{ config, pkgs, lib, userConfig, monitors, nixosConfigPath, ... }:
 
 let
   dotfilesPath = "${userConfig.homeDirectory}/nixos/dotfiles";
@@ -142,8 +142,9 @@ let
     };
   } // commonModules;
 
-  styleContent = builtins.readFile ../dotfiles/.config/waybar/style.css;
-  colorsContent = builtins.readFile ../dotfiles/.config/waybar/colors.css;
+  dotfilesWaybar = "${nixosConfigPath}/dotfiles/.config/waybar";
+  styleContent = builtins.readFile "${dotfilesWaybar}/style.css";
+  colorsContent = builtins.readFile "${dotfilesWaybar}/colors.css";
 
 in
 {
