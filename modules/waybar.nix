@@ -1,4 +1,4 @@
-{ config, pkgs, lib, userConfig, monitors, nixosConfigPath, ... }:
+{ config, pkgs, lib, userConfig, monitors, ... }:
 
 let
   dotfilesPath = "${userConfig.homeDirectory}/nixos/dotfiles";
@@ -142,15 +142,15 @@ let
     };
   } // commonModules;
 
-  dotfilesWaybar = "${nixosConfigPath}/dotfiles/.config/waybar";
-  styleContent = builtins.readFile "${dotfilesWaybar}/style.css";
-  colorsContent = builtins.readFile "${dotfilesWaybar}/colors.css";
-
 in
 {
   programs.waybar = {
     enable = true;
     settings = [ primaryBar secondaryBar ];
-    style = colorsContent + "\n" + styleContent;
+  };
+
+  xdg.configFile = {
+    "waybar/style.css".source = mkSymlink ".config/waybar/style.css";
+    "waybar/colors.css".source = mkSymlink ".config/waybar/colors.css";
   };
 }
