@@ -29,7 +29,7 @@ in
     dockerfile-language-server-nodejs
     docker-compose-language-service
     nodePackages.bash-language-server
-    nodePackages."@prisma/language-server"
+    prisma-language-server
     vue-language-server
     terraform-ls
     jdt-language-server
