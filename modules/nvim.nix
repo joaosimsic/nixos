@@ -40,7 +40,7 @@ in
     stylua
     black
     prettierd
-    nodePackages."@angular/language-server"
+    angular-language-server
     nodePackages.blade-formatter
     google-java-format
     gotools # goimports
