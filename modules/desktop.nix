@@ -54,6 +54,7 @@ in
     lazydocker
     tree-sitter
     unzip
+    lsof
     
     toggle-crt
   ];
