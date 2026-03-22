@@ -1,4 +1,4 @@
-{ config, pkgs, userConfig, inputs, ... }:
+{ config, pkgs, userConfig, ... }:
 
 {
   imports = [
@@ -15,9 +15,4 @@
 
   programs.home-manager.enable = true;
   programs.firefox.enable = true;
-
-  home.packages = [
-    inputs.walker.packages.${pkgs.system}.default
-    inputs.elephant.packages.${pkgs.system}.default
-  ];
 }
