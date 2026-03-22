@@ -54,5 +54,6 @@ in
 
     # Other
     lua51Packages.luarocks
+    opencode
   ];
 }
