@@ -7,7 +7,7 @@ in
 {
   xdg.configFile = {
     "hypr".source = mkSymlink ".config/hypr";
-    "tofi".source = mkSymlink ".config/tofi";
+    "rofi".source = mkSymlink ".config/rofi";
     "mako".source = mkSymlink ".config/mako";
     "ghostty".source = mkSymlink ".config/ghostty";
     "nushell".source = mkSymlink ".config/nushell";
