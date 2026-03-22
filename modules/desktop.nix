@@ -34,7 +34,7 @@ in
     hyprland
     hyprpaper
     waybar
-    wofi
+    tofi
     mako
     
     grim
