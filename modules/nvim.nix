@@ -16,15 +16,43 @@ in
   };
 
   home.packages = with pkgs; [
+    # LSP Servers
     lua-language-server
     nil
     rust-analyzer
     pyright
     nodePackages.typescript-language-server
-    nodePackages.vscode-langservers-extracted
+    nodePackages.vscode-langservers-extracted # html, css, json, eslint
     gopls
-    clang-tools
+    clang-tools # clangd + clang-format
+    nodePackages.intelephense
+    nodePackages.dockerfile-language-server-nodejs
+    nodePackages.docker-compose-language-service
+    nodePackages.bash-language-server
+    nodePackages."@prisma/language-server"
+    vue-language-server
+    terraform-ls
+    jdt-language-server
+    lemminx
+    roslyn-ls
 
+    # Formatters
+    stylua
+    black
+    prettierd
+    nodePackages."@angular/language-server"
+    nodePackages.blade-formatter
+    google-java-format
+    gotools # goimports
+    gofumpt
+    rustfmt
+
+    # Linters
+    eslint_d
+    pylint
+    golangci-lint
+
+    # Other
     lua51Packages.luarocks
   ];
 }
