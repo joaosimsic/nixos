@@ -34,7 +34,7 @@ in
     hyprland
     hyprpaper
     waybar
-    rofi-wayland
+    rofi
     mako
     
     grim
