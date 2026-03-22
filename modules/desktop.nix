@@ -45,6 +45,9 @@ in
     
     ghostty
     thunar
+    nodejs
+    lua51Packages.luarocks
+    python3
     
     toggle-crt
   ];

@@ -43,5 +43,7 @@
     wget
     ghostty
   ];
+
+  programs.nix-ld.enable = true;
 }
 
