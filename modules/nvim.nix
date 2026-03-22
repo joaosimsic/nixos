@@ -26,8 +26,8 @@ in
     gopls
     clang-tools # clangd + clang-format
     nodePackages.intelephense
-    nodePackages.dockerfile-language-server-nodejs
-    nodePackages.docker-compose-language-service
+    dockerfile-language-server-nodejs
+    docker-compose-language-service
     nodePackages.bash-language-server
     nodePackages."@prisma/language-server"
     vue-language-server
