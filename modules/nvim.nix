@@ -41,7 +41,7 @@ in
     black
     prettierd
     angular-language-server
-    nodePackages.blade-formatter
+    blade-formatter
     google-java-format
     gotools # goimports
     gofumpt
