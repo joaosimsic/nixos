@@ -15,6 +15,10 @@ in
     source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/nvim";
   };
 
+  xdg.configFile."opencode" = {
+    source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/opencode";
+  };
+
   home.packages = with pkgs; [
     # LSP Servers
     lua-language-server
