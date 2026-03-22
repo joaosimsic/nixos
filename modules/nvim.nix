@@ -26,7 +26,7 @@ in
     gopls
     clang-tools # clangd + clang-format
     nodePackages.intelephense
-    dockerfile-language-server-nodejs
+    dockerfile-language-server
     docker-compose-language-service
     nodePackages.bash-language-server
     prisma-language-server
