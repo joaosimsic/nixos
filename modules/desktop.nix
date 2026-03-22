@@ -46,8 +46,14 @@ in
     ghostty
     thunar
     nodejs
-    lua51Packages.luarocks
     python3
+    gcc
+    jdk21
+
+    lazygit
+    lazydocker
+    tree-sitter
+    unzip
     
     toggle-crt
   ];

@@ -14,4 +14,17 @@ in
   xdg.configFile."nvim" = {
     source = config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/.config/nvim";
   };
+
+  home.packages = with pkgs; [
+    lua-language-server
+    nil
+    rust-analyzer
+    pyright
+    nodePackages.typescript-language-server
+    nodePackages.vscode-langservers-extracted
+    gopls
+    clang-tools
+
+    lua51Packages.luarocks
+  ];
 }

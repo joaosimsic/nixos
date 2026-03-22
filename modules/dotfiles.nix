@@ -1,6 +1,3 @@
-# Dotfiles symlinks
-# Links ~/nixos/dotfiles/.config/* to ~/.config/*
-
 { config, userConfig, ... }:
 
 let
