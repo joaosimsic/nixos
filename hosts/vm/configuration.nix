@@ -15,7 +15,7 @@
   services.spice-vdagentd.enable = true;
 
   boot.kernelParams = [
-    "video=Virtual-1:1920x1080@60e"
+    "video=Virtual-1:1920x1080@144e"
     "video=Virtual-2:1920x1080@60e"
   ];
 

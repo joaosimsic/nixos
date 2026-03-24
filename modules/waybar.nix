@@ -84,7 +84,7 @@ let
     output = monitors.primary;
     layer = "top";
     position = "top";
-    height = 16;
+    height = 20;
     spacing = 0;
     margin-top = 0;
     margin-left = 0;
