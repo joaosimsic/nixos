@@ -14,6 +14,11 @@
   services.qemuGuest.enable = true;
   services.spice-vdagentd.enable = true;
 
+  boot.kernelParams = [
+    "video=Virtual-1:1920x1080@60e"
+    "video=Virtual-2:1920x1080@60e"
+  ];
+
   monitors = {
     primary = "Virtual-1";
     secondary = "Virtual-2";
