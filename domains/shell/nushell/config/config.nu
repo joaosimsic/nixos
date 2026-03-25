@@ -1,5 +1,3 @@
-use ~/.config/nushell/scripts/grave.nu
-
 $env.config = {
     show_banner: false
 
@@ -97,7 +95,7 @@ $env.config = {
             modifier: control
             keycode: char_g
             mode: [emacs, vi_normal, vi_insert]
-            event: { send: executehostcommand, cmd: "grave" }
+            event: { send: executehostcommand, cmd: "nu -c 'use ~/.config/nushell/scripts/grave.nu; grave'" }
         }
     ]
 }

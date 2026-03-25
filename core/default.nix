@@ -39,6 +39,7 @@
   environment.systemPackages = with pkgs; [
     git
     wget
+    nushell
   ];
 
   programs.nix-ld.enable = true;
