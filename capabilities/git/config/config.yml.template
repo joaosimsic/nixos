@@ -1,0 +1,33 @@
+# .config/lazygit/config.yml.template
+gui:
+  theme:
+    activeBorderColor:
+      - "{{BASE}}"
+      - bold
+    inactiveBorderColor:
+      - "{{DIM}}"
+    searchingActiveBorderColor:
+      - "{{CYAN}}"
+    optionsTextColor:
+      - "{{BLUE}}"
+    selectedLineBgColor:
+      - "{{SURFACE}}"
+    cherryPickedCommitFgColor:
+      - "{{MAGENTA}}"
+    cherryPickedCommitBgColor:
+      - "{{CYAN}}"
+    markedBaseCommitColor:
+      - "{{YELLOW}}"
+    unstagedChangesColor:
+      - "{{DIM}}"     
+    defaultFgColor:
+      - "{{BASE}}"
+
+git:
+  paging:
+    colorArg: always
+    pager: delta --dark --paging=never
+  commit:
+    status:
+      staged: "{{GREEN}}"  
+      unstaged: "{{RED}}"

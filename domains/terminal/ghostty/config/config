@@ -1,7 +1,7 @@
 config-file = colors.conf
 
 font-family = JetBrainsMono Nerd Font
-font-size = 11
+font-size = 13
 
 cursor-style = block
 cursor-style-blink = false
@@ -20,3 +20,5 @@ font-feature = +liga
 font-feature = +dlig
 
 scrollback-limit = 10000
+
+keybind = ctrl+q=text:\x11

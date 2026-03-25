@@ -1,28 +1,58 @@
 local shared_highlights = require("config.colors")
+require("config.theme")
 
 return {
-	{
-		"scottmckendry/cyberdream.nvim",
-		lazy = false,
-		priority = 1000,
-		config = function()
-			require("cyberdream").setup()
-			vim.cmd("colorscheme cyberdream")
-		end,
-	},
+	-- {
+	-- 	"scottmckendry/cyberdream.nvim",
+	-- 	lazy = false,
+	-- 	priority = 1000,
+	-- 	config = function()
+	-- 		require("cyberdream").setup()
+	-- 		vim.cmd("colorscheme cyberdream")
+	-- 	end,
+	-- },
 	{
 		"nvim-lualine/lualine.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
-		opts = {
-			options = {
-				theme = "nightfly",
-			},
-			sections = {
-				lualine_z = {
-					"location",
+		config = function()
+			local c = require("config.theme").colors
+			local theme = {
+				normal = {
+					a = { fg = c.black, bg = c.base, gui = "bold" },
+					b = { fg = c.base, bg = c.surface },
+					c = { fg = c.base, bg = c.black },
 				},
-			},
-		},
+				insert = {
+					a = { fg = c.black, bg = c.bright, gui = "bold" },
+					b = { fg = c.bright, bg = c.surface },
+					c = { fg = c.base, bg = c.black },
+				},
+				visual = {
+					a = { fg = c.black, bg = c.yellow, gui = "bold" },
+					b = { fg = c.yellow, bg = c.surface },
+					c = { fg = c.base, bg = c.black },
+				},
+				replace = {
+					a = { fg = c.black, bg = c.red, gui = "bold" },
+					b = { fg = c.red, bg = c.surface },
+					c = { fg = c.base, bg = c.black },
+				},
+				command = {
+					a = { fg = c.black, bg = c.cyan, gui = "bold" },
+					b = { fg = c.cyan, bg = c.surface },
+					c = { fg = c.base, bg = c.black },
+				},
+				inactive = {
+					a = { fg = c.comment, bg = c.surface },
+					b = { fg = c.comment, bg = c.black },
+					c = { fg = c.comment, bg = c.black },
+				},
+			}
+			require("lualine").setup({
+				options = { theme = theme },
+				sections = { lualine_z = { "location" } },
+			})
+		end,
 	},
 	{
 		"xiyaowong/transparent.nvim",

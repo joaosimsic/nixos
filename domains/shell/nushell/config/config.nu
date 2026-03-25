@@ -1,3 +1,5 @@
+use ~/.config/nushell/scripts/grave.nu
+
 $env.config = {
     show_banner: false
 
@@ -62,6 +64,41 @@ $env.config = {
             mode: [emacs, vi_normal, vi_insert]
             event: { send: historyhintcomplete }
         }
+        {
+            name: zellij_nav_left
+            modifier: alt
+            keycode: char_h
+            mode: [emacs, vi_normal, vi_insert]
+            event: { send: executehostcommand, cmd: "zellij action move-focus left" }
+        }
+        {
+            name: zellij_nav_down
+            modifier: alt
+            keycode: char_j
+            mode: [emacs, vi_normal, vi_insert]
+            event: { send: executehostcommand, cmd: "zellij action move-focus down" }
+        }
+        {
+            name: zellij_nav_up
+            modifier: alt
+            keycode: char_k
+            mode: [emacs, vi_normal, vi_insert]
+            event: { send: executehostcommand, cmd: "zellij action move-focus up" }
+        }
+        {
+            name: zellij_nav_right
+            modifier: alt
+            keycode: char_l
+            mode: [emacs, vi_normal, vi_insert]
+            event: { send: executehostcommand, cmd: "zellij action move-focus right" }
+        }
+        {
+            name: grave_session_selector
+            modifier: control
+            keycode: char_g
+            mode: [emacs, vi_normal, vi_insert]
+            event: { send: executehostcommand, cmd: "grave" }
+        }
     ]
 }
 
@@ -87,6 +124,8 @@ alias glog = git log --oneline --graph
 alias v = nvim
 alias vi = nvim
 alias vim = nvim
+
+alias z = zellij
 
 alias c = clear
 alias q = exit

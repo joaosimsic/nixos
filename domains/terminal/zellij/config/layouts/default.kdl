@@ -1,0 +1,42 @@
+layout {
+    default_tab_template {
+        children
+        pane size=1 borderless=true {
+            plugin location="https://github.com/dj95/zjstatus/releases/latest/download/zjstatus.wasm" {
+                format_left  "{mode}#[bg=#ff6600,fg=#0a0400]│ {tabs}"
+                format_center ""
+                format_right "#[bg=#ff6600,fg=#0a0400] {command_cwd} "
+                format_space "#[bg=#ff6600] "
+
+                hide_frame_for_single_pane "true"
+
+                mode_normal        "#[bg=#ff6600,fg=#0a0400,bold] NORMAL  "
+                mode_locked        "#[bg=#ff6600,fg=#0a0400,bold] LOCKED  "
+                mode_pane          "#[bg=#ff6600,fg=#0a0400,bold] PANE    "
+                mode_tab           "#[bg=#ff6600,fg=#0a0400,bold] TAB     "
+                mode_scroll        "#[bg=#ff6600,fg=#0a0400,bold] SCROLL  "
+                mode_enter_search  "#[bg=#ff6600,fg=#0a0400,bold] SEARCH  "
+                mode_search        "#[bg=#ff6600,fg=#0a0400,bold] SEARCH  "
+                mode_resize        "#[bg=#ff6600,fg=#0a0400,bold] RESIZE  "
+                mode_rename_tab    "#[bg=#ff6600,fg=#0a0400,bold] RENAME  "
+                mode_rename_pane   "#[bg=#ff6600,fg=#0a0400,bold] RENAME  "
+                mode_move          "#[bg=#ff6600,fg=#0a0400,bold] MOVE    "
+                mode_session       "#[bg=#ff6600,fg=#0a0400,bold] SESSION "
+                mode_tmux          "#[bg=#ff6600,fg=#0a0400,bold] TMUX    "
+
+                tab_normal              "#[bg=#ff6600,fg=#0a0400]  {index}  "
+                tab_normal_fullscreen   "#[bg=#ff6600,fg=#0a0400]  {index}  "
+                tab_normal_sync         "#[bg=#ff6600,fg=#0a0400]  {index}  "
+                tab_active              "#[bg=#ffb280,fg=#0a0400,bold]  {index}  "
+                tab_active_fullscreen   "#[bg=#ffb280,fg=#0a0400,bold]  {index}  "
+                tab_active_sync         "#[bg=#ffb280,fg=#0a0400,bold]  {index}  "
+                tab_separator           "#[bg=#ff6600] "
+
+                command_cwd_command    "pwd"
+                command_cwd_format     "{stdout}"
+                command_cwd_interval   "1"
+                command_cwd_rendermode "static"
+            }
+        }
+    }
+}

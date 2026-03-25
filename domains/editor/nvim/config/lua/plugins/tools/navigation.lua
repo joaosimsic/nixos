@@ -208,32 +208,15 @@ return {
 		end,
 	},
 	{
-		"christoomey/vim-tmux-navigator",
+		"swaits/zellij-nav.nvim",
+		lazy = true,
+		event = "VeryLazy",
 		keys = {
-			{
-				"<C-h>",
-				":TmuxNavigateLeft<CR>",
-				silent = true,
-				mode = "n",
-			},
-			{
-				"<C-j>",
-				":TmuxNavigateDown<CR>",
-				silent = true,
-				mode = "n",
-			},
-			{
-				"<C-k>",
-				":TmuxNavigateUp<CR>",
-				silent = true,
-				mode = "n",
-			},
-			{
-				"<C-l>",
-				":TmuxNavigateRight<CR>",
-				silent = true,
-				mode = "n",
-			},
+			{ "<A-h>", "<cmd>ZellijNavigateLeftTab<cr>", mode = "n", silent = true, desc = "Navigate left" },
+			{ "<A-j>", "<cmd>ZellijNavigateDown<cr>", mode = "n", silent = true, desc = "Navigate down" },
+			{ "<A-k>", "<cmd>ZellijNavigateUp<cr>", mode = "n", silent = true, desc = "Navigate up" },
+			{ "<A-l>", "<cmd>ZellijNavigateRightTab<cr>", mode = "n", silent = true, desc = "Navigate right" },
 		},
+		opts = {},
 	},
 }

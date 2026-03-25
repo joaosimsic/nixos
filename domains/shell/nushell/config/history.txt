@@ -1,0 +1,7 @@
+nvim
+clear
+nvim
+cd nixos/dotfiles/
+nvim
+cd ..
+nvim
