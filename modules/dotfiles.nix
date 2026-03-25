@@ -13,5 +13,6 @@ in
     "nushell".source = mkSymlink ".config/nushell";
     "starship.toml".source = mkSymlink ".config/starship.toml";
     "zellij".source = mkSymlink ".config/zellij";
+    "lazygit".source = mkSymlink ".config/lazygit";
   };
 }
