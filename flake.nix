@@ -1,5 +1,5 @@
 {
-  description = "NixOS config";
+  description = "Amber - NixOS Configuration";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -21,7 +21,11 @@
       homeDirectory = "/home/joao";
     };
     
-    nixosConfigPath = builtins.toString ./.;
+    amberPath = builtins.toString ./.;
+
+    devMode = true;
+
+    amberLib = import ./core/lib.nix { lib = nixpkgs.lib; };
 
     hosts = {
       personal = {
@@ -42,11 +46,12 @@
       nixpkgs.lib.nixosSystem {
         system = hostConfig.system;
         specialArgs = { 
-          inherit inputs hostname nixosConfigPath;
+          inherit inputs hostname amberPath devMode amberLib;
           userConfig = hostConfig.user;
         };
         modules = [
-          ./modules/monitors.nix
+          ./core
+          ./domains/wm/hyprland/system.nix
           ./hosts/${hostname}/configuration.nix
           home-manager.nixosModules.home-manager
           ({ config, ... }: {
@@ -54,7 +59,7 @@
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "backup";
             home-manager.extraSpecialArgs = { 
-              inherit inputs nixosConfigPath;
+              inherit inputs amberPath devMode amberLib;
               userConfig = hostConfig.user;
               monitors = config.monitors;
             };

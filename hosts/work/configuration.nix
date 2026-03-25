@@ -1,14 +1,13 @@
-{ config, pkgs, hostname, userConfig, ... }:
+{ config, pkgs, hostname, ... }:
+
 {
   imports = [
     ./hardware-configuration.nix
-    ../../modules/system/common.nix
-    ../../modules/system/desktop-hyprland-sddm.nix
   ];
 
   networking.hostName = hostname;
 
-  boot.kernelPackages = pkgs.linuxPackages_6_8;
+  boot.kernelPackages = pkgs.linuxPackages_6_6;
 
   boot.initrd.kernelModules = [
     "i915"
@@ -35,4 +34,3 @@
 
   system.stateVersion = "24.11";
 }
-

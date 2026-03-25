@@ -1,0 +1,46 @@
+keybinds clear-defaults=false {
+    shared_except "locked" {
+        bind "Alt h" { MoveFocusOrTab "Left"; }
+        bind "Alt l" { MoveFocusOrTab "Right"; }
+        bind "Alt j" { MoveFocus "Down"; }
+        bind "Alt k" { MoveFocus "Up"; }
+    }
+    shared_except "locked" "normal" {
+        bind "Ctrl c" { SwitchToMode "Normal"; }
+    }
+}
+
+theme "custom"
+
+themes {
+    custom {
+        fg "#ff6600"
+        bg "#0a0400"
+        black "#0a0400"
+        red "#cc4400"
+        green "#ff6600"
+        yellow "#ff9c59"
+        blue "#ff6600"
+        magenta "#ff9c59"
+        cyan "#ff6600"
+        white "#ff9c59"
+        orange "#ff6600"
+    }
+}
+
+default_layout "compact"
+default_mode "normal"
+pane_frames false
+auto_layout true
+session_serialization true
+serialize_pane_viewport true
+
+mouse_mode true
+scroll_buffer_size 10000
+
+copy_on_select true
+
+simplified_ui true
+hide_session_name false
+
+on_force_close "quit"

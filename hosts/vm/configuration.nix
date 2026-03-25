@@ -1,10 +1,8 @@
-{ config, pkgs, inputs, hostname, nixosConfigPath, userConfig, ... }:
+{ config, pkgs, inputs, hostname, ... }:
 
 {
   imports = [
     ./hardware-configuration.nix
-    ../../modules/system/common.nix
-    ../../modules/system/desktop-hyprland-sddm.nix
   ];
 
   networking.hostName = hostname;

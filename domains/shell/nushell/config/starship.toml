@@ -1,0 +1,92 @@
+# Starship - Clean Two-Line Prompt
+
+format = """
+$directory $git_branch$git_status$all
+$character"""
+
+add_newline = true
+
+[directory]
+format = "[$path]($style)[$read_only]($read_only_style)"
+style = "bold cyan"
+read_only = " RO"
+read_only_style = "bold red"
+truncation_length = 3
+truncate_to_repo = false
+
+[git_branch]
+format = "on [$branch]($style)"
+style = "bold purple"
+symbol = ""
+
+[git_status]
+format = " [$all_status$ahead_behind]($style)"
+style = "bold yellow"
+conflicted = "!"
+ahead = "+"
+behind = "-"
+diverged = "+-"
+untracked = "?"
+stashed = "*"
+modified = "~"
+staged = ">"
+renamed = "r"
+deleted = "x"
+
+[character]
+success_symbol = "[>](bold green)"
+error_symbol = "[>](bold red)"
+vimcmd_symbol = "[<](bold yellow)"
+
+# Only show when relevant
+[username]
+format = "[$user]($style) "
+style_user = "bold"
+style_root = "bold red"
+show_always = false
+
+[hostname]
+format = "[@$hostname]($style) "
+style = "bold"
+ssh_only = true
+
+# Language/tool versions - only show when detected
+[nodejs]
+format = "[$symbol($version)]($style) "
+symbol = "node "
+
+[python]
+format = "[$symbol$version]($style) "
+symbol = "py "
+
+[rust]
+format = "[$symbol($version)]($style) "
+symbol = "rs "
+
+[golang]
+format = "[$symbol($version)]($style) "
+symbol = "go "
+
+[java]
+format = "[$symbol($version)]($style) "
+symbol = "java "
+
+[php]
+format = "[$symbol($version)]($style) "
+symbol = "php "
+
+[ruby]
+format = "[$symbol($version)]($style) "
+symbol = "rb "
+
+[nix_shell]
+format = "[$symbol$state]($style) "
+symbol = "nix "
+
+[docker_context]
+format = "[$symbol$context]($style) "
+symbol = "docker "
+
+[package]
+format = "[$symbol$version]($style) "
+symbol = "pkg "

@@ -1,0 +1,17 @@
+# Mako - CRT Notifications
+# Minimal, text-based look
+# Generated from config.template by set-theme.sh — do not edit manually.
+
+font=JetBrains Mono Bold 10
+background-color={{BLACK}}
+text-color={{BASE}}
+border-color={{BASE}}
+border-size=1
+border-radius=0
+padding=4,8
+margin=0
+width=250
+height=80
+default-timeout=3000
+max-visible=3
+anchor=top-right

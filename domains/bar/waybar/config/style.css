@@ -1,0 +1,75 @@
+@import "colors.css";
+
+* {
+  border: none;
+  border-radius: 0;
+  font-family:
+    "JetBrains Mono Nerd Font", "JetBrains Mono", "Terminus", "Courier New",
+    monospace;
+  font-size: 11px;
+  font-weight: bold;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+window#waybar {
+  background-color: @base;
+  color: @black;
+  border-bottom: 1px solid @dim;
+}
+
+#workspaces {
+  padding-left: 0;
+}
+
+#workspaces button {
+  padding: 0 4px;
+  color: @bg;
+  background: transparent;
+  border: none;
+  margin: 0;
+}
+
+#workspaces button.active {
+  color: @base;
+  background: @black;
+}
+
+#workspaces button.urgent {
+  color: red;
+}
+
+#workspaces button:hover {
+  background: @bright;
+  color: @black;
+}
+
+#submap {
+  color: @base;
+  padding: 0 4px;
+  background: @black;
+}
+
+#custom-date,
+#custom-weather,
+#language,
+#pulseaudio,
+#network,
+#clock {
+  padding: 0 6px;
+  color: @black;
+  background: transparent;
+}
+
+#pulseaudio.muted {
+  color: @bg;
+}
+
+#network.disconnected {
+  color: @bg;
+}
+
+#clock {
+  padding-right: 4px;
+}
