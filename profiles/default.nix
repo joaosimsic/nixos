@@ -19,7 +19,7 @@
     ../toolchains/nix.nix
     ../toolchains/java.nix
     ../toolchains/php.nix
-    ../toolchains/web.nix
+    ../toolchains/javascript.nix
     ../toolchains/docker.nix
     ../toolchains/bash.nix
     ../toolchains/terraform.nix
