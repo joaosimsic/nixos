@@ -217,6 +217,9 @@ return {
 			{ "<A-k>", "<cmd>ZellijNavigateUp<cr>", mode = "n", silent = true, desc = "Navigate up" },
 			{ "<A-l>", "<cmd>ZellijNavigateRightTab<cr>", mode = "n", silent = true, desc = "Navigate right" },
 		},
+		cond = function()
+			return vim.fn.executable("zellij") == 1 and vim.env.ZELLIJ ~= nil
+		end,
 		opts = {},
 	},
 }

@@ -1,6 +1,13 @@
 { config, pkgs, lib, userConfig, monitors, amberLib, devMode, amberPath, ... }:
 
 let
+  devModeModule = lib.optionalAttrs devMode {
+    "custom/devmode" = {
+      format = " DEV";
+      tooltip = false;
+    };
+  };
+
   commonModules = {
     "hyprland/submap" = {
       format = " RESIZE";
@@ -92,7 +99,7 @@ let
 
     modules-left = ["hyprland/workspaces" "hyprland/submap"];
     modules-center = ["custom/date" "clock"];
-    modules-right = ["custom/weather" "hyprland/language" "pulseaudio" "network"];
+    modules-right = (lib.optional devMode "custom/devmode") ++ ["custom/weather" "hyprland/language" "pulseaudio" "network"];
 
     "hyprland/workspaces" = {
       format = "{name}{windows}";
@@ -104,7 +111,7 @@ let
         "${monitors.primary.name}" = [1 2 3 4 5];
       };
     };
-  } // commonModules;
+  } // commonModules // devModeModule;
 
   secondaryBar = {
     output = monitors.secondary.name;
@@ -118,7 +125,7 @@ let
 
     modules-left = ["hyprland/workspaces" "hyprland/submap"];
     modules-center = ["custom/date" "clock"];
-    modules-right = ["custom/weather" "hyprland/language" "pulseaudio" "network"];
+    modules-right = (lib.optional devMode "custom/devmode") ++ ["custom/weather" "hyprland/language" "pulseaudio" "network"];
 
     "hyprland/workspaces" = {
       format = "{name}{windows}";
@@ -137,7 +144,7 @@ let
         "${monitors.secondary.name}" = [6 7 8 9 10];
       };
     };
-  } // commonModules;
+  } // commonModules // devModeModule;
 
   waybarConfigPath = "${amberPath}/domains/bar/waybar/config";
 

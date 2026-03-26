@@ -51,6 +51,12 @@ window#waybar {
   background: @black;
 }
 
+#custom-devmode {
+  color: @base;
+  padding: 0 6px;
+  background: @black;
+}
+
 #custom-date,
 #custom-weather,
 #language,

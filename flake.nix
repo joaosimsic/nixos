@@ -23,7 +23,7 @@
     
     amberPath = "/home/joao/.config/amber";
 
-    devMode = true;
+    devMode = false;
 
     amberLib = import ./core/lib.nix { lib = nixpkgs.lib; };
 

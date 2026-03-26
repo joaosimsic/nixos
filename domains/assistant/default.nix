@@ -3,6 +3,7 @@
 {
   home.packages = with pkgs; [
     opencode
+    claude-code
   ];
 
   xdg.configFile."opencode".source = amberLib.mkConfig {
