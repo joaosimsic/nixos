@@ -28,4 +28,11 @@
   zramSwap.enable = true;
 
   system.stateVersion = "24.11";
+
+  virtualisation.vmVariant = {
+    virtualisation.sharedDirectories.amber = {
+      source = "/home/joao/.config/amber"; 
+      target = "/home/joao/.config/amber";
+    };
+  };
 }
