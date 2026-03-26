@@ -24,18 +24,18 @@
   xdg.configFile."hypr/shaders".source = ./config/shaders;
 
   xdg.configFile."hypr/monitors.conf".text = ''
-    monitor = ${monitors.primary}, preferred, 0x0, 1
-    monitor = ${monitors.secondary}, preferred, 1920x0, 1
+    monitor = ${monitors.primary.name}, ${monitors.primary.resolution}@${toString monitors.primary.refreshRate}, 0x0, 1
+    monitor = ${monitors.secondary.name}, ${monitors.secondary.resolution}@${toString monitors.secondary.refreshRate}, 1920x0, 1
 
-    workspace = 1, monitor:${monitors.primary}
-    workspace = 2, monitor:${monitors.primary}
-    workspace = 3, monitor:${monitors.primary}
-    workspace = 4, monitor:${monitors.primary}
-    workspace = 5, monitor:${monitors.primary}
-    workspace = 6, monitor:${monitors.secondary}
-    workspace = 7, monitor:${monitors.secondary}
-    workspace = 8, monitor:${monitors.secondary}
-    workspace = 9, monitor:${monitors.secondary}
-    workspace = 10, monitor:${monitors.secondary}
+    workspace = 1, monitor:${monitors.primary.name}
+    workspace = 2, monitor:${monitors.primary.name}
+    workspace = 3, monitor:${monitors.primary.name}
+    workspace = 4, monitor:${monitors.primary.name}
+    workspace = 5, monitor:${monitors.primary.name}
+    workspace = 6, monitor:${monitors.secondary.name}
+    workspace = 7, monitor:${monitors.secondary.name}
+    workspace = 8, monitor:${monitors.secondary.name}
+    workspace = 9, monitor:${monitors.secondary.name}
+    workspace = 10, monitor:${monitors.secondary.name}
   '';
 }

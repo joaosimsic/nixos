@@ -17,11 +17,6 @@
     "video=Virtual-2:1920x1080@60e"
   ];
 
-  monitors = {
-    primary = "Virtual-1";
-    secondary = "Virtual-2";
-  };
-
   services.xserver.videoDrivers = [ "modesetting" ];
 
   hardware.graphics.enable = true;

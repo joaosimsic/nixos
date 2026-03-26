@@ -81,7 +81,7 @@ let
   };
 
   primaryBar = {
-    output = monitors.primary;
+    output = monitors.primary.name;
     layer = "top";
     position = "top";
     height = 20;
@@ -101,13 +101,13 @@ let
       window-rewrite = windowRewrite;
       on-click = "activate";
       persistent-workspaces = {
-        "${monitors.primary}" = [1 2 3 4 5];
+        "${monitors.primary.name}" = [1 2 3 4 5];
       };
     };
   } // commonModules;
 
   secondaryBar = {
-    output = monitors.secondary;
+    output = monitors.secondary.name;
     layer = "top";
     position = "top";
     height = 16;
@@ -134,7 +134,7 @@ let
         "10" = "5";
       };
       persistent-workspaces = {
-        "${monitors.secondary}" = [6 7 8 9 10];
+        "${monitors.secondary.name}" = [6 7 8 9 10];
       };
     };
   } // commonModules;

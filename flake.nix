@@ -21,9 +21,9 @@
       homeDirectory = "/home/joao";
     };
     
-    amberPath = builtins.toString ./.;
+    amberPath = "/home/joao/.config/amber";
 
-    devMode = false;
+    devMode = true;
 
     amberLib = import ./core/lib.nix { lib = nixpkgs.lib; };
 
