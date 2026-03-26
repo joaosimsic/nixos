@@ -29,7 +29,7 @@
     description = userConfig.username;
     extraGroups = [ "wheel" "networkmanager" "video" "audio" ];
     initialPassword = lib.mkDefault "changeme";
-    shell = pkgs.bash;
+    shell = pkgs.nushell;
   };
 
   environment.shells = [ pkgs.bash pkgs.nushell ];
