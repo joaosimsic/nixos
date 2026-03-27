@@ -7,7 +7,11 @@
 
   networking.hostName = hostname;
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  systemd.settings.Manager = {
+    DefaultTimeoutStopSec = "10s";
+  };
+
+ boot.kernelPackages = pkgs.linuxPackages_latest;
 
   services.qemuGuest.enable = true;
   services.spice-vdagentd.enable = true;
