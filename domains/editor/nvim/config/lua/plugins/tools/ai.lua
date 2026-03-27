@@ -155,13 +155,37 @@ local ai_plugins = {
 				mode = "n",
 			},
 			{
+				"<leader>ga",
+				"<cmd>ClaudeCodeDiffAccept<cr>",
+			},
+			{
+				"<leader>gd",
+          "<cmd>ClaudeCodeDiffDeny<cr>",
+			},
+			{
 				"<leader>gl",
 				function()
 					vim.cmd("ClaudeCode")
-					vim.defer_fn(function()
-						local keys = vim.api.nvim_replace_termcodes("/rewind<cr>", true, false, true)
-						vim.api.nvim_feedkeys(keys, "n", false)
-					end, 150)
+					local attempts = 0
+					local max_attempts = 20
+					local timer = vim.uv.new_timer()
+					timer:start(
+						50,
+						50,
+						vim.schedule_wrap(function()
+							attempts = attempts + 1
+							local mode = vim.api.nvim_get_mode().mode
+							if mode == "t" then
+								timer:stop()
+								timer:close()
+								local keys = vim.api.nvim_replace_termcodes("/resume<CR>", true, false, true)
+								vim.api.nvim_feedkeys(keys, "t", false)
+							elseif attempts >= max_attempts then
+								timer:stop()
+								timer:close()
+							end
+						end)
+					)
 				end,
 				mode = "n",
 			},
@@ -183,9 +207,9 @@ local ai_plugins = {
 				diff_opts = {
 					layout = "vertical",
 					open_in_new_tab = true,
-					keep_terminal_focus = true,
+					keep_terminal_focus = false,
 					open_in_current_tab = false,
-					hide_terminal_in_new_tab = false,
+					hide_terminal_in_new_tab = true,
 					on_new_file_reject = "close_window",
 				},
 			})
@@ -199,7 +223,6 @@ local ai_plugins = {
 
 					local opts = { buffer = true, noremap = true, silent = true }
 
-					vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], opts)
 					vim.keymap.set("t", "<C-c>", [[<C-\><C-n>]], opts)
 					vim.keymap.set("t", "q", [[<C-\><C-n>]], opts)
 				end,

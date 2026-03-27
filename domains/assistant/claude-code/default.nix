@@ -2,13 +2,12 @@
 
 {
   home.packages = with pkgs; [
-    opencode
     claude-code
   ];
 
-  xdg.configFile."opencode".source = amberLib.mkConfig {
+  xdg.configFile."claude".source = amberLib.mkConfig {
     inherit config devMode amberPath;
-    configPath = "domains/assistant/config";
+    configPath = "domains/assistant/claude/config";
     sourcePath = ./config;
   };
 }
