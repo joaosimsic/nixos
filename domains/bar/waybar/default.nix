@@ -99,7 +99,7 @@ let
 
     modules-left = ["hyprland/workspaces" "hyprland/submap"];
     modules-center = ["custom/date" "clock"];
-    modules-right = (lib.optional devMode "custom/devmode") ++ ["custom/weather" "hyprland/language" "pulseaudio" "network"];
+    modules-right = ["custom/weather" "hyprland/language" "pulseaudio" "network"] ++ (lib.optional devMode "custom/devmode");
 
     "hyprland/workspaces" = {
       format = "{name}{windows}";
@@ -125,7 +125,7 @@ let
 
     modules-left = ["hyprland/workspaces" "hyprland/submap"];
     modules-center = ["custom/date" "clock"];
-    modules-right = (lib.optional devMode "custom/devmode") ++ ["custom/weather" "hyprland/language" "pulseaudio" "network"];
+    modules-right = ["custom/weather" "hyprland/language" "pulseaudio" "network"] ++ (lib.optional devMode "custom/devmode");
 
     "hyprland/workspaces" = {
       format = "{name}{windows}";
@@ -160,6 +160,9 @@ in
     if [ -f "${waybarConfigPath}/style.css" ]; then
       cp "${waybarConfigPath}/style.css" "${userConfig.homeDirectory}/.config/waybar/style.css"
       cp "${waybarConfigPath}/colors.css" "${userConfig.homeDirectory}/.config/waybar/colors.css"
+      ${lib.optionalString devMode ''
+        ${pkgs.gnused}/bin/sed -i 's/background-color: @base;/background-color: @bright;/' "${userConfig.homeDirectory}/.config/waybar/style.css"
+      ''}
     fi
   '';
 }
