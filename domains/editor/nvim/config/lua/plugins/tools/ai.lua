@@ -182,9 +182,9 @@ local ai_plugins = {
 				},
 				diff_opts = {
 					layout = "vertical",
-					open_in_new_tab = false,
+					open_in_new_tab = true,
 					keep_terminal_focus = true,
-					open_in_current_tab = true,
+					open_in_current_tab = false,
 					hide_terminal_in_new_tab = false,
 					on_new_file_reject = "close_window",
 				},
@@ -193,12 +193,23 @@ local ai_plugins = {
 			vim.api.nvim_create_autocmd("TermOpen", {
 				group = vim.api.nvim_create_augroup("ClaudeTerminalClose", { clear = false }),
 				pattern = "term://*claude*",
-				callback = function()
+				callback = function(ev)
+					vim.bo[ev.buf].bufhidden = "wipe"
+					vim.bo[ev.buf].modified = false
+
 					local opts = { buffer = true, noremap = true, silent = true }
 
 					vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], opts)
 					vim.keymap.set("t", "<C-c>", [[<C-\><C-n>]], opts)
 					vim.keymap.set("t", "q", [[<C-\><C-n>]], opts)
+				end,
+			})
+
+			vim.api.nvim_create_autocmd("TermClose", {
+				group = vim.api.nvim_create_augroup("ClaudeTerminalClose", { clear = false }),
+				pattern = "term://*claude*",
+				callback = function(ev)
+					vim.bo[ev.buf].modified = false
 				end,
 			})
 		end,
