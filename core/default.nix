@@ -67,7 +67,7 @@ let
       echo "Done. Run 'amber lock' to restore clean state."
 
     else
-      echo "Amber Dev CLI"
+      echo "Amber CLI"
       echo "Usage: amber <command>"
       echo ""
       echo "Commands:"
