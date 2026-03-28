@@ -36,7 +36,7 @@ let
     elif [ "$COMMAND" = "lock" ]; then
       echo "Locking system: Restoring Nix immutable configurations..."
       
-      home-manager switch --flake /home/joao/.config/amber#joao
+      home-manager switch --flake /home/joao/.config/amber#joao -b backup
       
       echo ""
       echo "Done. System state is secure."

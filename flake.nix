@@ -78,14 +78,7 @@
         userConfig = defaultUser;
         monitors = defaultMonitors;
       };
-      modules = [
-        ./home.nix
-        {
-          home.stateVersion = "24.05";
-          programs.home-manager.enable = true;
-          home.backupFileExtension = "backup";
-        }
-      ];
+      modules = [ ./home.nix ];
     };
   };
 }
