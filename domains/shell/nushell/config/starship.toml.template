@@ -6,20 +6,20 @@ add_newline = true
 
 [directory]
 format = "[$path]($style)[$read_only]($read_only_style)"
-style = "bold #ff9c59"
+style = "bold #{{BRIGHT}}"
 read_only = " RO"
-read_only_style = "bold #912115"
+read_only_style = "bold #{{RED}}"
 truncation_length = 3
 truncate_to_repo = false
 
 [git_branch]
 format = "on [$branch]($style)"
-style = "#703e1c"
+style = "#{{COMMENT}}"
 symbol = ""
 
 [git_status]
 format = " [$all_status$ahead_behind]($style)"
-style = "#a3a31d"
+style = "#{{YELLOW}}"
 conflicted = "!"
 ahead = "+"
 behind = "-"
@@ -32,67 +32,67 @@ renamed = "r"
 deleted = "x"
 
 [character]
-success_symbol = "[>](bold #4d981b)"
-error_symbol = "[>](bold #912115)"
-vimcmd_symbol = "[<](bold #ff6600)"
+success_symbol = "[>](bold #{{GREEN}})"
+error_symbol = "[>](bold #{{RED}})"
+vimcmd_symbol = "[<](bold #{{BASE}})"
 
 [username]
 format = "[$user]($style) "
-style_user = "bold #ff9c59"
-style_root = "bold #912115"
+style_user = "bold #{{BRIGHT}}"
+style_root = "bold #{{RED}}"
 show_always = false
 
 [hostname]
 format = "[@$hostname]($style) "
-style = "bold #703e1c"
+style = "bold #{{COMMENT}}"
 ssh_only = true
 
 [nodejs]
 format = "[$symbol($version)]($style) "
 symbol = "node "
-style = "#703e1c"
+style = "#{{COMMENT}}"
 
 [python]
 format = "[$symbol$version]($style) "
 symbol = "py "
-style = "#703e1c"
+style = "#{{COMMENT}}"
 
 [rust]
 format = "[$symbol($version)]($style) "
 symbol = "rs "
-style = "#703e1c"
+style = "#{{COMMENT}}"
 
 [golang]
 format = "[$symbol($version)]($style) "
 symbol = "go "
-style = "#703e1c"
+style = "#{{COMMENT}}"
 
 [java]
 format = "[$symbol($version)]($style) "
 symbol = "java "
-style = "#703e1c"
+style = "#{{COMMENT}}"
 
 [php]
 format = "[$symbol($version)]($style) "
 symbol = "php "
-style = "#703e1c"
+style = "#{{COMMENT}}"
 
 [ruby]
 format = "[$symbol($version)]($style) "
 symbol = "rb "
-style = "#703e1c"
+style = "#{{COMMENT}}"
 
 [nix_shell]
 format = "[$symbol$state]($style) "
 symbol = "nix "
-style = "#703e1c"
+style = "#{{COMMENT}}"
 
 [docker_context]
 format = "[$symbol$context]($style) "
 symbol = "docker "
-style = "#703e1c"
+style = "#{{COMMENT}}"
 
 [package]
 format = "[$symbol$version]($style) "
 symbol = "pkg "
-style = "#703e1c"
+style = "#{{COMMENT}}"

@@ -378,7 +378,28 @@ sed -e "s/{{BASE}}/$BASE/g" -e "s/{{BRIGHT}}/$BRIGHT/g" -e "s/{{DIM}}/$DIM/g" -e
     "$DOTFILES/domains/shell/nushell/config/scripts/grave.nu.template" > "$DOTFILES/domains/shell/nushell/config/scripts/grave.nu"
 
 
-# ── 9. Generate Neovim theme ─────────────────────────────────────────────────
+# ── 9. Generate Nushell colors ───────────────────────────────────────────────
+
+
+sed \
+    -e "s/{{BASE}}/$BASE/g" -e "s/{{BRIGHT}}/$BRIGHT/g" -e "s/{{DIM}}/$DIM/g" \
+    -e "s/{{BG}}/$BG/g" -e "s/{{BLACK}}/$BLACK/g" -e "s/{{COMMENT}}/$COMMENT/g" \
+    -e "s/{{RED}}/$RED/g" -e "s/{{GREEN}}/$GREEN/g" -e "s/{{YELLOW}}/$YELLOW/g" \
+    -e "s/{{BLUE}}/$BLUE/g" -e "s/{{CYAN}}/$CYAN/g" \
+    "$DOTFILES/domains/shell/nushell/config/colors.nu.template" > "$DOTFILES/domains/shell/nushell/config/colors.nu"
+
+
+# ── 10. Generate Starship theme ──────────────────────────────────────────────
+
+
+sed \
+    -e "s/{{BASE}}/$BASE/g" -e "s/{{BRIGHT}}/$BRIGHT/g" -e "s/{{DIM}}/$DIM/g" \
+    -e "s/{{COMMENT}}/$COMMENT/g" \
+    -e "s/{{RED}}/$RED/g" -e "s/{{GREEN}}/$GREEN/g" -e "s/{{YELLOW}}/$YELLOW/g" \
+    "$DOTFILES/domains/shell/nushell/config/starship.toml.template" > "$DOTFILES/domains/shell/nushell/config/starship.toml"
+
+
+# ── 11. Generate Neovim theme ─────────────────────────────────────────────────
 
 
 NVIM_LUA_DIR="$DOTFILES/domains/editor/nvim/config/lua/config"
@@ -409,20 +430,21 @@ if [ -f "$NVIM_TEMPLATE" ]; then
 
     if command -v nvim >/dev/null 2>&1; then
 
-        for server in "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"/nvim.*.0; do
-
-            [ -e "$server" ] || continue
-
-            nvim --server "$server" --remote-send '<Esc>:lua package.loaded["config.theme"] = nil<CR>:require("config.theme")<CR>' &>/dev/null
-
-        done
+        (
+            shopt -s nullglob
+            for server in "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"/nvim.*.0; do
+                nvim --server "$server" --remote-expr \
+                    'luaeval("package.loaded[\"config.theme\"] = nil; require(\"config.theme\"); 1")' \
+                    >/dev/null 2>&1 || true
+            done
+        )
 
     fi
 
 fi
 
 
-# ── 10. Generate Lazygit config ──────────────────────────────────────────────
+# ── 12. Generate Lazygit config ──────────────────────────────────────────────
 
 
 LAZYGIT_TEMPLATE="$DOTFILES/capabilities/git/config/config.yml.template"
@@ -445,7 +467,7 @@ fi
 echo "Done. Color files generated."
 
 
-# ── 11. Reload running apps ───────────────────────────────────────────────────
+# ── 13. Reload running apps ───────────────────────────────────────────────────
 
 
 if command -v hyprctl >/dev/null 2>&1; then

@@ -100,6 +100,8 @@ $env.config = {
     ]
 }
 
+source colors.nu
+
 alias .. = cd ..
 alias ... = cd ../..
 alias .... = cd ../../..
