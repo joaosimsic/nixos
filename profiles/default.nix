@@ -34,7 +34,7 @@
     ../domains/bar/waybar
     ../domains/launcher/rofi
     ../domains/notifications/mako
-    ../domains/assistant/claude-code
+    ../domains/assistant/claude
   ];
 
   programs.firefox.enable = true;

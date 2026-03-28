@@ -13,13 +13,12 @@ pkgs.writeShellScriptBin "amber" ''
         target_name="$app_name"
 
         case "$app_name" in
-          hyprland)    target_name="hypr" ;;
-          claude-code) target_name="claude" ;;
+          hyprland) target_name="hypr" ;;
         esac
 
         TARGET="/home/joao/.config/$target_name"
 
-        if [ "$app_name" = "claude-code" ]; then
+        if [ "$app_name" = "claude" ]; then
           mkdir -p "$TARGET"
           for file in "$config_dir"/*; do
             if [ -f "$file" ]; then
@@ -44,6 +43,11 @@ pkgs.writeShellScriptBin "amber" ''
 
   elif [ "$COMMAND" = "lock" ]; then
     echo "Locking system: Restoring Nix immutable configurations..."
+    
+    if [ -L "/home/joao/.config/claude" ]; then
+      rm /home/joao/.config/claude
+      mkdir -p /home/joao/.config/claude
+    fi
     
     HOSTNAME=$(hostname)
     home-manager switch --flake "/home/joao/.config/amber#joao@$HOSTNAME" -b backup
