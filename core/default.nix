@@ -36,12 +36,35 @@ let
     elif [ "$COMMAND" = "lock" ]; then
       echo "Locking system: Restoring Nix immutable configurations..."
       
-      # Auto-detect hostname for correct monitor config
       HOSTNAME=$(hostname)
       home-manager switch --flake "/home/joao/.config/amber#joao@$HOSTNAME" -b backup
       
       echo ""
       echo "Done. System state is secure."
+
+    elif [ "$COMMAND" = "clean" ]; then
+      echo "Cleaning up legacy home-manager artifacts..."
+      
+      if [ -d "/home/joao/.local/bin" ]; then
+        rm -rf /home/joao/.local/bin
+        echo " -> Removed ~/.local/bin"
+      fi
+      
+      if [ -d "/home/joao/.local/state/home-manager" ]; then
+        rm -rf /home/joao/.local/state/home-manager
+        echo " -> Removed ~/.local/state/home-manager"
+      fi
+      
+      if nix-env -q 2>/dev/null | grep -q .; then
+        echo " -> Removing nix-env packages..."
+        nix-env -e '.*'
+      fi
+      
+      find /home/joao/.config -name "*.backup" -type f -delete 2>/dev/null
+      echo " -> Removed .backup files"
+      
+      echo ""
+      echo "Done. Run 'amber lock' to restore clean state."
 
     else
       echo "Amber Dev CLI"
@@ -50,6 +73,7 @@ let
       echo "Commands:"
       echo "  dev   - Auto-link all repo configs to ~/.config (Live 0ms iteration)"
       echo "  lock  - Run home-manager switch to restore immutable Nix safety"
+      echo "  clean - Remove legacy artifacts from old home-manager setup"
     fi
   '';
 in
