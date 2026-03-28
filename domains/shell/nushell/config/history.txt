@@ -1,8 +1,0 @@
-nvim
-clear
-nvim
-cd nixos/dotfiles/
-nvim
-cd ..
-nvim
-rm -rf ~/.config/nushell; amber sync
