@@ -206,9 +206,9 @@ print(json.dumps(data, indent=2))
       echo ""
       echo "Versioning: Use git directly in ~/.config/amber/"
       echo "  git diff           - See uncommitted changes"
-      echo "  git commit -am ''  - Save a checkpoint"
+      echo "  git commit -am 'message'  - Save a checkpoint"
       echo "  git log --oneline  - List checkpoints"
-      echo "  git checkout <id> -- domains/<app>/config/  - Restore"
+      echo "  git checkout <id> -- domains/<app>/config  - Restore"
       ;;
   esac
 ''
