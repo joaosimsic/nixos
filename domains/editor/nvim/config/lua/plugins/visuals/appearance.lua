@@ -20,32 +20,32 @@ return {
 				normal = {
 					a = { fg = c.black, bg = c.base, gui = "bold" },
 					b = { fg = c.base, bg = c.surface },
-					c = { fg = c.base, bg = c.black },
+					c = { fg = c.base, bg = c.surface },
 				},
 				insert = {
 					a = { fg = c.black, bg = c.bright, gui = "bold" },
 					b = { fg = c.bright, bg = c.surface },
-					c = { fg = c.base, bg = c.black },
+					c = { fg = c.base, bg = c.surface },
 				},
 				visual = {
 					a = { fg = c.black, bg = c.yellow, gui = "bold" },
 					b = { fg = c.yellow, bg = c.surface },
-					c = { fg = c.base, bg = c.black },
+					c = { fg = c.base, bg = c.surface },
 				},
 				replace = {
 					a = { fg = c.black, bg = c.red, gui = "bold" },
 					b = { fg = c.red, bg = c.surface },
-					c = { fg = c.base, bg = c.black },
+					c = { fg = c.base, bg = c.surface },
 				},
 				command = {
 					a = { fg = c.black, bg = c.cyan, gui = "bold" },
 					b = { fg = c.cyan, bg = c.surface },
-					c = { fg = c.base, bg = c.black },
+					c = { fg = c.base, bg = c.surface },
 				},
 				inactive = {
 					a = { fg = c.comment, bg = c.surface },
-					b = { fg = c.comment, bg = c.black },
-					c = { fg = c.comment, bg = c.black },
+					b = { fg = c.comment, bg = c.surface },
+					c = { fg = c.comment, bg = c.surface },
 				},
 			}
 			require("lualine").setup({

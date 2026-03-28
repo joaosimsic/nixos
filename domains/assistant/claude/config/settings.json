@@ -3,5 +3,8 @@
   "permissions": {
     "allow": [],
     "deny": []
+  },
+  "enabledPlugins": {
+    "lua-lsp@claude-plugins-official": true
   }
 }
