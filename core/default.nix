@@ -1,7 +1,7 @@
 { config, lib, pkgs, userConfig, ... }:
 
 let
-  amberScript = pkgs.writeShellScriptBin "amber" ''
+  amber = pkgs.writeShellScriptBin "amber" ''
     COMMAND=$1
 
     if [ "$COMMAND" = "dev" ]; then
@@ -36,7 +36,9 @@ let
     elif [ "$COMMAND" = "lock" ]; then
       echo "Locking system: Restoring Nix immutable configurations..."
       
-      home-manager switch --flake /home/joao/.config/amber#joao -b backup
+      # Auto-detect hostname for correct monitor config
+      HOSTNAME=$(hostname)
+      home-manager switch --flake "/home/joao/.config/amber#joao@$HOSTNAME" -b backup
       
       echo ""
       echo "Done. System state is secure."
@@ -93,7 +95,7 @@ in
     nushell
     home-manager
     starship
-    amberScript
+    amber
   ];
 
   programs.nix-ld.enable = true;

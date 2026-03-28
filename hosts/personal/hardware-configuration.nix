@@ -11,18 +11,7 @@
 
   hardware.enableRedistributableFirmware = true;
 
-  monitors = {
-    primary = {
-      name = "DP-1";
-      resolution = "1920x1080";
-      refreshRate = 144;
-    };
-    secondary = {
-      name = "HDMI-A-2";
-      resolution = "1920x1080";
-      refreshRate = 60;
-    };
-  };
+  monitors = import ./monitors.nix;
 
   fileSystems."/" = {
     device = "/dev/disk/by-label/root";

@@ -12,46 +12,16 @@
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs: 
   let
-    supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
-    
-    forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
-    
-    defaultUser = {
-      username = "joao";
-      homeDirectory = "/home/joao";
-    };
-    
     amberPath = "/home/joao/.config/amber";
 
-    defaultMonitors = {
-      primary = {
-        name = "DP-1";
-        resolution = "1920x1080";
-        refreshRate = 144;
-      };
-      secondary = {
-        name = "HDMI-A-1";
-        resolution = "1920x1080";
-        refreshRate = 60;
-      };
-    };
+    hostNames = [ "personal" "work" "vm" ];
 
-    hosts = {
-      personal = {
-        system = "x86_64-linux";
-        user = defaultUser;
-      };
-      work = {
-        system = "x86_64-linux";
-        user = defaultUser;
-      };
-      vm = {
-        system = "x86_64-linux";
-        user = defaultUser;
-      };
-    };
+    getHostConfig = hostname: import ./hosts/${hostname};
 
-    mkHost = hostname: hostConfig: 
+    mkHost = hostname: 
+      let
+        hostConfig = getHostConfig hostname;
+      in
       nixpkgs.lib.nixosSystem {
         system = hostConfig.system;
         specialArgs = { 
@@ -65,20 +35,32 @@
         ];
       };
 
-  in {
-    nixosConfigurations = nixpkgs.lib.mapAttrs mkHost hosts;
+    mkHome = hostname: 
+      let
+        hostConfig = getHostConfig hostname;
+      in
+      home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {
+          system = hostConfig.system;
+          config.allowUnfree = true;
+        };
+        extraSpecialArgs = {
+          inherit inputs amberPath;
+          userConfig = hostConfig.user;
+          monitors = hostConfig.monitors;
+        };
+        modules = [ ./home.nix ];
+      };
 
-    homeConfigurations."joao" = home-manager.lib.homeManagerConfiguration {
-      pkgs = import nixpkgs {
-        system = "x86_64-linux";
-        config.allowUnfree = true;
-      };
-      extraSpecialArgs = {
-        inherit inputs amberPath;
-        userConfig = defaultUser;
-        monitors = defaultMonitors;
-      };
-      modules = [ ./home.nix ];
-    };
+  in {
+    nixosConfigurations = nixpkgs.lib.genAttrs hostNames mkHost;
+
+    homeConfigurations = 
+      let
+        perHost = nixpkgs.lib.genAttrs 
+          (map (h: "joao@${h}") hostNames) 
+          (name: mkHome (nixpkgs.lib.removePrefix "joao@" name));
+      in
+      perHost // { "joao" = mkHome "personal"; };
   };
 }
