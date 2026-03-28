@@ -11,4 +11,11 @@ if [ ! -d "$HOST_DIR" ]; then
   exit 0
 fi
 
-sudo nixos-rebuild switch --flake .#"$HOSTNAME"
+if sudo nixos-rebuild switch --flake .#"$HOSTNAME"; then
+  echo ""
+  echo "Rebuild successful! Running amber sync..."
+  amber sync
+else
+  echo "NixOS rebuild failed. Skipping amber sync."
+  exit 1
+fi
