@@ -6,3 +6,8 @@ ide
 .claude.json
 .credentials.json
 mcp-needs-auth-cache.json
+file-history
+paste-cache
+image-cache
+projects
+history.jsonl

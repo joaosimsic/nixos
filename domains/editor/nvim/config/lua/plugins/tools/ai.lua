@@ -224,7 +224,6 @@ local ai_plugins = {
 					local opts = { buffer = true, noremap = true, silent = true }
 
 					vim.keymap.set("t", "<C-c>", [[<C-\><C-n>]], opts)
-					vim.keymap.set("t", "q", [[<C-\><C-n>]], opts)
 				end,
 			})
 

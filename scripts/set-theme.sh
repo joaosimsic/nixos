@@ -102,42 +102,42 @@ black        = hls_hex(h, l * 0.04, s)
 comment      = hls_hex(h, l * 0.55, s * 0.6)
 
 
-h_green      = (h + 0.25) % 1.0
+h_red        = (h - 0.05) % 1.0
 
-h_red        = (h - 0.08) % 1.0
+h_yellow     = (h + 0.10) % 1.0
 
-h_yellow     = (h + 0.08) % 1.0
+h_green      = (h + 0.20) % 1.0
 
-h_blue       = (h + 0.55) % 1.0
+h_cyan       = (h + 0.15) % 1.0
 
-h_magenta    = (h + 0.42) % 1.0
+h_blue       = (h - 0.15) % 1.0
 
-h_cyan       = (h + 0.35) % 1.0
+h_magenta    = (h - 0.10) % 1.0
 
 
-green        = hls_hex(h_green, l * 0.70, s * 0.85)
+green        = hls_hex(h_green, l * 0.70, s * 0.70)
 
-green_bright = hls_hex(h_green, min(l * 0.90, 0.75), s * 0.85)
+green_bright = hls_hex(h_green, min(l * 0.90, 0.75), s * 0.70)
 
-red          = hls_hex(h_red, l * 0.65, min(s * 1.1, 1.0))
+red          = hls_hex(h_red, l * 0.65, s * 0.75)
 
-red_bright   = hls_hex(h_red, min(l * 0.85, 0.70), min(s * 1.1, 1.0))
+red_bright   = hls_hex(h_red, min(l * 0.85, 0.70), s * 0.75)
 
-yellow       = hls_hex(h_yellow, l * 0.75, s * 0.95)
+yellow       = hls_hex(h_yellow, l * 0.75, s * 0.70)
 
-yellow_bright= hls_hex(h_yellow, min(l * 0.95, 0.80), s * 0.95)
+yellow_bright= hls_hex(h_yellow, min(l * 0.95, 0.80), s * 0.70)
 
-blue         = hls_hex(h_blue, l * 0.60, s * 0.80)
+blue         = hls_hex(h_blue, l * 0.60, s * 0.65)
 
-blue_bright  = hls_hex(h_blue, min(l * 0.80, 0.70), s * 0.80)
+blue_bright  = hls_hex(h_blue, min(l * 0.80, 0.70), s * 0.65)
 
-magenta      = hls_hex(h_magenta, l * 0.65, s * 0.80)
+magenta      = hls_hex(h_magenta, l * 0.65, s * 0.65)
 
-magenta_bright = hls_hex(h_magenta, min(l * 0.85, 0.75), s * 0.80)
+magenta_bright = hls_hex(h_magenta, min(l * 0.85, 0.75), s * 0.65)
 
-cyan         = hls_hex(h_cyan, l * 0.60, s * 0.75)
+cyan         = hls_hex(h_cyan, l * 0.60, s * 0.65)
 
-cyan_bright  = hls_hex(h_cyan, min(l * 0.80, 0.70), s * 0.75)
+cyan_bright  = hls_hex(h_cyan, min(l * 0.80, 0.70), s * 0.65)
 
 
 error        = red
@@ -360,54 +360,21 @@ EOF
 # ── 6. Generate Mako config ──────────────────────────────────────────────────
 
 
-sed \
-
-    -e "s/{{BASE}}/#$BASE/g"   \
-
-    -e "s/{{BRIGHT}}/#$BRIGHT/g" \
-
-    -e "s/{{DIM}}/#$DIM/g"     \
-
-    -e "s/{{BG}}/#$BG/g"       \
-
-    -e "s/{{BLACK}}/#$BLACK/g" \
-
+sed -e "s/{{BASE}}/#$BASE/g" -e "s/{{BRIGHT}}/#$BRIGHT/g" -e "s/{{DIM}}/#$DIM/g" -e "s/{{BG}}/#$BG/g" -e "s/{{BLACK}}/#$BLACK/g" \
     "$DOTFILES/domains/notifications/mako/config/config.template" > "$DOTFILES/domains/notifications/mako/config/config"
 
 
 # ── 7. Generate Rofi theme ───────────────────────────────────────────────────
 
 
-sed \
-
-    -e "s/{{BASE}}/#$BASE/g"   \
-
-    -e "s/{{BRIGHT}}/#$BRIGHT/g" \
-
-    -e "s/{{DIM}}/#$DIM/g"     \
-
-    -e "s/{{BG}}/#$BG/g"       \
-
-    -e "s/{{BLACK}}/#$BLACK/g" \
-
+sed -e "s/{{BASE}}/#$BASE/g" -e "s/{{BRIGHT}}/#$BRIGHT/g" -e "s/{{DIM}}/#$DIM/g" -e "s/{{BG}}/#$BG/g" -e "s/{{BLACK}}/#$BLACK/g" \
     "$DOTFILES/domains/launcher/rofi/config/theme.rasi.template" > "$DOTFILES/domains/launcher/rofi/config/theme.rasi"
 
 
 # ── 8. Generate Nushell Grave script ─────────────────────────────────────────
 
 
-sed \
-
-    -e "s/{{BASE}}/$BASE/g"   \
-
-    -e "s/{{BRIGHT}}/$BRIGHT/g" \
-
-    -e "s/{{DIM}}/$DIM/g"     \
-
-    -e "s/{{BG}}/$BG/g"       \
-
-    -e "s/{{BLACK}}/$BLACK/g" \
-
+sed -e "s/{{BASE}}/$BASE/g" -e "s/{{BRIGHT}}/$BRIGHT/g" -e "s/{{DIM}}/$DIM/g" -e "s/{{BG}}/$BG/g" -e "s/{{BLACK}}/$BLACK/g" \
     "$DOTFILES/domains/shell/nushell/config/scripts/grave.nu.template" > "$DOTFILES/domains/shell/nushell/config/scripts/grave.nu"
 
 
@@ -423,48 +390,17 @@ NVIM_CONFIG="$NVIM_LUA_DIR/theme.lua"
 
 if [ -f "$NVIM_TEMPLATE" ]; then
 
-    sed -e "s/{{BASE}}/$BASE/g" \
-
-        -e "s/{{BRIGHT}}/$BRIGHT/g" \
-
-        -e "s/{{DIM}}/$DIM/g" \
-
-        -e "s/{{SURFACE}}/$SURFACE/g" \
-
-        -e "s/{{BG}}/$BG/g" \
-
-        -e "s/{{BLACK}}/$BLACK/g" \
-
+    sed \
+        -e "s/{{BASE}}/$BASE/g" -e "s/{{BRIGHT}}/$BRIGHT/g" -e "s/{{DIM}}/$DIM/g" \
+        -e "s/{{SURFACE}}/$SURFACE/g" -e "s/{{BG}}/$BG/g" -e "s/{{BLACK}}/$BLACK/g" \
         -e "s/{{COMMENT}}/$COMMENT/g" \
-
-        -e "s/{{GREEN}}/$GREEN/g" \
-
-        -e "s/{{GREEN_BRIGHT}}/$GREEN_BRIGHT/g" \
-
-        -e "s/{{RED}}/$RED/g" \
-
-        -e "s/{{RED_BRIGHT}}/$RED_BRIGHT/g" \
-
-        -e "s/{{YELLOW}}/$YELLOW/g" \
-
-        -e "s/{{YELLOW_BRIGHT}}/$YELLOW_BRIGHT/g" \
-
-        -e "s/{{BLUE}}/$BLUE/g" \
-
-        -e "s/{{BLUE_BRIGHT}}/$BLUE_BRIGHT/g" \
-
-        -e "s/{{MAGENTA}}/$MAGENTA/g" \
-
-        -e "s/{{MAGENTA_BRIGHT}}/$MAGENTA_BRIGHT/g" \
-
-        -e "s/{{CYAN}}/$CYAN/g" \
-
-        -e "s/{{CYAN_BRIGHT}}/$CYAN_BRIGHT/g" \
-
-        -e "s/{{ERROR}}/$ERROR/g" \
-
-        -e "s/{{ERROR_BRIGHT}}/$ERROR_BRIGHT/g" \
-
+        -e "s/{{RED}}/$RED/g" -e "s/{{RED_BRIGHT}}/$RED_BRIGHT/g" \
+        -e "s/{{GREEN}}/$GREEN/g" -e "s/{{GREEN_BRIGHT}}/$GREEN_BRIGHT/g" \
+        -e "s/{{YELLOW}}/$YELLOW/g" -e "s/{{YELLOW_BRIGHT}}/$YELLOW_BRIGHT/g" \
+        -e "s/{{BLUE}}/$BLUE/g" -e "s/{{BLUE_BRIGHT}}/$BLUE_BRIGHT/g" \
+        -e "s/{{MAGENTA}}/$MAGENTA/g" -e "s/{{MAGENTA_BRIGHT}}/$MAGENTA_BRIGHT/g" \
+        -e "s/{{CYAN}}/$CYAN/g" -e "s/{{CYAN_BRIGHT}}/$CYAN_BRIGHT/g" \
+        -e "s/{{ERROR}}/$ERROR/g" -e "s/{{ERROR_BRIGHT}}/$ERROR_BRIGHT/g" \
         "$NVIM_TEMPLATE" > "$NVIM_CONFIG"
 
     
@@ -496,31 +432,32 @@ LAZYGIT_CONFIG="$DOTFILES/capabilities/git/config/config.yml"
 
 if [ -f "$LAZYGIT_TEMPLATE" ]; then
 
-    sed -e "s/{{BASE}}/$BASE/g" \
-
-        -e "s/{{BRIGHT}}/$BRIGHT/g" \
-
-        -e "s/{{DIM}}/$DIM/g" \
-
+    sed \
+        -e "s/{{BASE}}/$BASE/g" -e "s/{{BRIGHT}}/$BRIGHT/g" -e "s/{{DIM}}/$DIM/g" \
         -e "s/{{SURFACE}}/$SURFACE/g" \
-
-        -e "s/{{RED}}/$RED/g" \
-
-        -e "s/{{GREEN}}/$GREEN/g" \
-
-        -e "s/{{YELLOW}}/$YELLOW/g" \
-
-        -e "s/{{BLUE}}/$BLUE/g" \
-
-        -e "s/{{MAGENTA}}/$MAGENTA/g" \
-
-        -e "s/{{CYAN}}/$CYAN/g" \
-
+        -e "s/{{RED}}/$RED/g" -e "s/{{GREEN}}/$GREEN/g" -e "s/{{YELLOW}}/$YELLOW/g" \
+        -e "s/{{BLUE}}/$BLUE/g" -e "s/{{MAGENTA}}/$MAGENTA/g" -e "s/{{CYAN}}/$CYAN/g" \
         "$LAZYGIT_TEMPLATE" > "$LAZYGIT_CONFIG"
 
 fi
 
 
 echo "Done. Color files generated."
+
+
+# ── 11. Reload running apps ───────────────────────────────────────────────────
+
+
+if command -v hyprctl >/dev/null 2>&1; then
+    hyprctl reload &>/dev/null && echo "  hyprland reloaded" || true
+fi
+
+if pgrep -x waybar >/dev/null 2>&1; then
+    pkill -SIGUSR2 waybar && echo "  waybar reloaded" || true
+fi
+
+if command -v makoctl >/dev/null 2>&1; then
+    makoctl reload &>/dev/null && echo "  mako reloaded" || true
+fi
 
 
