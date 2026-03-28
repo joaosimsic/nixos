@@ -91,6 +91,8 @@ in
     git
     wget
     nushell
+    home-manager
+    starship
     amberScript
   ];
 
