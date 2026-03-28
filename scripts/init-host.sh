@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
+cd "$(dirname "$0")/.."
+
 HOSTNAME=$(hostname)
+
 HOST_DIR="hosts/$HOSTNAME"
 
 if [ -d "$HOST_DIR" ]; then
