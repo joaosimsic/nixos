@@ -43,6 +43,10 @@ pkgs.writeShellScriptBin "amber" ''
   sync_hyprland() {
     local config_dir="$AMBER_ROOT/domains/wm/hyprland/config"
     local target="/home/joao/.config/hypr"
+
+    if [ -L "$target" ]; then
+      rm "$target"
+    fi
     
     mkdir -p "$target"
     
@@ -86,6 +90,10 @@ EOF
     local config_dir="$AMBER_ROOT/domains/bar/waybar/config"
     local target="/home/joao/.config/waybar"
     
+    if [ -L "$target" ]; then
+      rm "$target"
+    fi
+
     mkdir -p "$target"
     
     ln -sfn "$config_dir/style.css" "$target/style.css"
