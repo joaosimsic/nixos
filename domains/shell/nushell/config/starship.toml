@@ -1,5 +1,3 @@
-# Starship - Clean Two-Line Prompt
-
 format = """
 $directory $git_branch$git_status$all
 $character"""
@@ -38,7 +36,6 @@ success_symbol = "[>](bold green)"
 error_symbol = "[>](bold red)"
 vimcmd_symbol = "[<](bold yellow)"
 
-# Only show when relevant
 [username]
 format = "[$user]($style) "
 style_user = "bold"
@@ -50,7 +47,6 @@ format = "[@$hostname]($style) "
 style = "bold"
 ssh_only = true
 
-# Language/tool versions - only show when detected
 [nodejs]
 format = "[$symbol($version)]($style) "
 symbol = "node "
