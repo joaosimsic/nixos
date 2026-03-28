@@ -1,5 +1,56 @@
 { config, lib, pkgs, userConfig, ... }:
 
+let
+  amberScript = pkgs.writeShellScriptBin "amber" ''
+    COMMAND=$1
+
+    if [ "$COMMAND" = "dev" ]; then
+      echo "Unlocking Dev Mode: Auto-linking configurations..."
+
+      for config_dir in /home/joao/.config/amber/domains/*/*/config /home/joao/.config/amber/capabilities/*/config; do
+        if [ -d "$config_dir" ]; then
+          
+          app_name=$(basename $(dirname "$config_dir"))
+          target_name="$app_name"
+
+          case "$app_name" in
+            hyprland)    target_name="hypr" ;;
+            claude-code) target_name="claude" ;;
+          esac
+
+          TARGET="/home/joao/.config/$target_name"
+
+          ln -sfn "$config_dir" "$TARGET"
+          echo " -> Linked $target_name"
+        fi
+      done
+
+      if [ -f "/home/joao/.config/amber/domains/shell/nushell/config/starship.toml" ]; then
+        ln -sfn "/home/joao/.config/amber/domains/shell/nushell/config/starship.toml" "/home/joao/.config/starship.toml"
+        echo " -> Linked starship.toml"
+      fi
+
+      echo ""
+      echo "Done. You are now live-editing your repository."
+
+    elif [ "$COMMAND" = "lock" ]; then
+      echo "Locking system: Restoring Nix immutable configurations..."
+      
+      home-manager switch --flake /home/joao/.config/amber#joao
+      
+      echo ""
+      echo "Done. System state is secure."
+
+    else
+      echo "Amber Dev CLI"
+      echo "Usage: amber <command>"
+      echo ""
+      echo "Commands:"
+      echo "  dev   - Auto-link all repo configs to ~/.config (Live 0ms iteration)"
+      echo "  lock  - Run home-manager switch to restore immutable Nix safety"
+    fi
+  '';
+in
 {
   imports = [
     ./audio.nix
@@ -40,6 +91,7 @@
     git
     wget
     nushell
+    amberScript
   ];
 
   programs.nix-ld.enable = true;

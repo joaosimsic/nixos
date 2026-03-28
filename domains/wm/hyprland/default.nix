@@ -1,4 +1,4 @@
-{ config, pkgs, amberLib, devMode, amberPath, monitors, ... }:
+{ config, pkgs, monitors, ... }:
 
 {
   home.packages = with pkgs; [

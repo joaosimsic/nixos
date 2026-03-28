@@ -1,4 +1,4 @@
-{ config, pkgs, amberLib, devMode, amberPath, ... }:
+{ config, pkgs, ... }:
 
 {
   home.packages = with pkgs; [
@@ -6,9 +6,5 @@
     libnotify
   ];
 
-  xdg.configFile."mako".source = amberLib.mkConfig {
-    inherit config devMode amberPath;
-    configPath = "domains/notifications/mako/config";
-    sourcePath = ./config;
-  };
+  xdg.configFile."mako".source = ./config;
 }

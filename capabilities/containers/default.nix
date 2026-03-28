@@ -1,13 +1,9 @@
-{ config, pkgs, amberLib, devMode, amberPath, ... }:
+{ config, pkgs, ... }:
 
 {
   home.packages = with pkgs; [
     lazydocker
   ];
 
-  xdg.configFile."lazydocker".source = amberLib.mkConfig {
-    inherit config devMode amberPath;
-    configPath = "capabilities/containers/config";
-    sourcePath = ./config;
-  };
+  xdg.configFile."lazydocker".source = ./config;
 }

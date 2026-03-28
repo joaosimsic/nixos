@@ -1,13 +1,9 @@
-{ config, pkgs, amberLib, devMode, amberPath, ... }:
+{ config, pkgs, ... }:
 
 {
   home.packages = with pkgs; [
     lazygit
   ];
 
-  xdg.configFile."lazygit".source = amberLib.mkConfig {
-    inherit config devMode amberPath;
-    configPath = "capabilities/git/config";
-    sourcePath = ./config;
-  };
+  xdg.configFile."lazygit".source = ./config;
 }

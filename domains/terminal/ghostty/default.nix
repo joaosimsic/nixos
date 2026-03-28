@@ -1,13 +1,9 @@
-{ config, pkgs, amberLib, devMode, amberPath, ... }:
+{ config, pkgs, ... }:
 
 {
   home.packages = with pkgs; [
     ghostty
   ];
 
-  xdg.configFile."ghostty".source = amberLib.mkConfig {
-    inherit config devMode amberPath;
-    configPath = "domains/terminal/ghostty/config";
-    sourcePath = ./config;
-  };
+  xdg.configFile."ghostty".source = ./config;
 }

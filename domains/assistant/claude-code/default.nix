@@ -1,13 +1,9 @@
-{ config, pkgs, amberLib, devMode, amberPath, ... }:
+{ config, pkgs, ... }:
 
 {
   home.packages = with pkgs; [
     claude-code
   ];
 
-  xdg.configFile."claude".source = amberLib.mkConfig {
-    inherit config devMode amberPath;
-    configPath = "domains/assistant/claude/config";
-    sourcePath = ./config;
-  };
+  xdg.configFile."claude".source = ./config;
 }

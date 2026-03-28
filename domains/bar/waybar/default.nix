@@ -1,13 +1,6 @@
-{ config, pkgs, lib, userConfig, monitors, amberLib, devMode, amberPath, ... }:
+{ config, pkgs, lib, userConfig, monitors, ... }:
 
 let
-  devModeModule = lib.optionalAttrs devMode {
-    "custom/devmode" = {
-      format = " DEV";
-      tooltip = false;
-    };
-  };
-
   commonModules = {
     "hyprland/submap" = {
       format = " RESIZE";
@@ -99,7 +92,7 @@ let
 
     modules-left = ["hyprland/workspaces" "hyprland/submap"];
     modules-center = ["custom/date" "clock"];
-    modules-right = ["custom/weather" "hyprland/language" "pulseaudio" "network"] ++ (lib.optional devMode "custom/devmode");
+    modules-right = ["custom/weather" "hyprland/language" "pulseaudio" "network"];
 
     "hyprland/workspaces" = {
       format = "{name}{windows}";
@@ -111,7 +104,7 @@ let
         "${monitors.primary.name}" = [1 2 3 4 5];
       };
     };
-  } // commonModules // devModeModule;
+  } // commonModules;
 
   secondaryBar = {
     output = monitors.secondary.name;
@@ -125,7 +118,7 @@ let
 
     modules-left = ["hyprland/workspaces" "hyprland/submap"];
     modules-center = ["custom/date" "clock"];
-    modules-right = ["custom/weather" "hyprland/language" "pulseaudio" "network"] ++ (lib.optional devMode "custom/devmode");
+    modules-right = ["custom/weather" "hyprland/language" "pulseaudio" "network"];
 
     "hyprland/workspaces" = {
       format = "{name}{windows}";
@@ -144,9 +137,7 @@ let
         "${monitors.secondary.name}" = [6 7 8 9 10];
       };
     };
-  } // commonModules // devModeModule;
-
-  waybarConfigPath = "${amberPath}/domains/bar/waybar/config";
+  } // commonModules;
 
 in
 {
@@ -155,14 +146,6 @@ in
   ];
 
   xdg.configFile."waybar/config".text = builtins.toJSON [ primaryBar secondaryBar ];
-
-  home.activation.waybarCss = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    if [ -f "${waybarConfigPath}/style.css" ]; then
-      cp "${waybarConfigPath}/style.css" "${userConfig.homeDirectory}/.config/waybar/style.css"
-      cp "${waybarConfigPath}/colors.css" "${userConfig.homeDirectory}/.config/waybar/colors.css"
-      ${lib.optionalString devMode ''
-        ${pkgs.gnused}/bin/sed -i 's/background-color: @base;/background-color: @bright;/' "${userConfig.homeDirectory}/.config/waybar/style.css"
-      ''}
-    fi
-  '';
+  xdg.configFile."waybar/style.css".source = ./config/style.css;
+  xdg.configFile."waybar/colors.css".source = ./config/colors.css;
 }

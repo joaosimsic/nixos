@@ -1,4 +1,4 @@
-{ config, pkgs, amberLib, devMode, amberPath, ... }:
+{ config, pkgs, ... }:
 
 {
   programs.neovim = {
@@ -8,9 +8,5 @@
     vimAlias = true;
   };
 
-  xdg.configFile."nvim".source = amberLib.mkConfig {
-    inherit config devMode amberPath;
-    configPath = "domains/editor/nvim/config";
-    sourcePath = ./config;
-  };
+  xdg.configFile."nvim".source = ./config;
 }

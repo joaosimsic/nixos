@@ -23,9 +23,18 @@
     
     amberPath = "/home/joao/.config/amber";
 
-    devMode = false;
-
-    amberLib = import ./core/lib.nix { lib = nixpkgs.lib; };
+    defaultMonitors = {
+      primary = {
+        name = "DP-1";
+        resolution = "1920x1080";
+        refreshRate = 144;
+      };
+      secondary = {
+        name = "HDMI-A-1";
+        resolution = "1920x1080";
+        refreshRate = 60;
+      };
+    };
 
     hosts = {
       personal = {
@@ -46,31 +55,27 @@
       nixpkgs.lib.nixosSystem {
         system = hostConfig.system;
         specialArgs = { 
-          inherit inputs hostname amberPath devMode amberLib;
+          inherit inputs hostname amberPath;
           userConfig = hostConfig.user;
         };
         modules = [
           ./core
           ./domains/wm/hyprland/system.nix
           ./hosts/${hostname}/configuration.nix
-          home-manager.nixosModules.home-manager
-          ({ config, ... }: {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "backup";
-            home-manager.extraSpecialArgs = { 
-              inherit inputs amberPath devMode amberLib;
-              userConfig = hostConfig.user;
-              monitors = config.monitors;
-            };
-            home-manager.users.${hostConfig.user.username} = {
-              imports = [ ./home.nix ];
-            };
-          })
         ];
       };
 
   in {
     nixosConfigurations = nixpkgs.lib.mapAttrs mkHost hosts;
+
+    homeConfigurations."joao" = home-manager.lib.homeManagerConfiguration {
+      pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      extraSpecialArgs = {
+        inherit inputs amberPath;
+        userConfig = defaultUser;
+        monitors = defaultMonitors;
+      };
+      modules = [ ./home.nix ];
+    };
   };
 }

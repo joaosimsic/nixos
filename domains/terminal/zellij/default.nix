@@ -1,13 +1,9 @@
-{ config, pkgs, amberLib, devMode, amberPath, ... }:
+{ config, pkgs, ... }:
 
 {
   home.packages = with pkgs; [
     zellij
   ];
 
-  xdg.configFile."zellij".source = amberLib.mkConfig {
-    inherit config devMode amberPath;
-    configPath = "domains/terminal/zellij/config";
-    sourcePath = ./config;
-  };
+  xdg.configFile."zellij".source = ./config;
 }
