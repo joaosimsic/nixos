@@ -5,6 +5,4 @@
     mako
     libnotify
   ];
-
-  xdg.configFile."mako".source = ./config;
 }

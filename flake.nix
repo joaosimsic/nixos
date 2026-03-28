@@ -47,7 +47,6 @@
         extraSpecialArgs = {
           inherit inputs amberPath;
           userConfig = hostConfig.user;
-          monitors = hostConfig.monitors;
         };
         modules = [ ./home.nix ];
       };

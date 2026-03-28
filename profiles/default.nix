@@ -35,6 +35,7 @@
     ../domains/launcher/rofi
     ../domains/notifications/mako
     ../domains/assistant/claude
+    ../domains/assistant/opencode
   ];
 
   programs.firefox.enable = true;

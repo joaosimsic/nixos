@@ -1,91 +1,214 @@
 { pkgs }:
 
 pkgs.writeShellScriptBin "amber" ''
-  COMMAND=$1
+  AMBER_ROOT="/home/joao/.config/amber"
+  HOSTNAME=$(hostname)
+  
+  get_target_name() {
+    case "$1" in
+      hyprland) echo "hypr" ;;
+      *)        echo "$1" ;;
+    esac
+  }
 
-  if [ "$COMMAND" = "dev" ]; then
-    echo "Unlocking Dev Mode: Auto-linking configurations..."
+  needs_special_sync() {
+    case "$1" in
+      hyprland|waybar) return 0 ;;
+      *) return 1 ;;
+    esac
+  }
 
-    for config_dir in /home/joao/.config/amber/domains/*/*/config /home/joao/.config/amber/capabilities/*/config; do
+  get_monitor() {
+    local monitor=$1  
+    local field=$2    
+    local file="$AMBER_ROOT/hosts/$HOSTNAME/monitors.nix"
+    
+    if [ ! -f "$file" ]; then
+      return 1
+    fi
+    
+    case "$field" in
+      name)
+        ${pkgs.gnugrep}/bin/grep -A5 "$monitor = {" "$file" | ${pkgs.gnugrep}/bin/grep "name = " | head -1 | ${pkgs.gnused}/bin/sed 's/.*"\(.*\)".*/\1/'
+        ;;
+      resolution)
+        ${pkgs.gnugrep}/bin/grep -A5 "$monitor = {" "$file" | ${pkgs.gnugrep}/bin/grep "resolution = " | head -1 | ${pkgs.gnused}/bin/sed 's/.*"\(.*\)".*/\1/'
+        ;;
+      refreshRate)
+        ${pkgs.gnugrep}/bin/grep -A5 "$monitor = {" "$file" | ${pkgs.gnugrep}/bin/grep "refreshRate = " | head -1 | ${pkgs.gnused}/bin/sed 's/.*= \([0-9]*\).*/\1/'
+        ;;
+    esac
+  }
+
+  sync_hyprland() {
+    local config_dir="$AMBER_ROOT/domains/wm/hyprland/config"
+    local target="/home/joao/.config/hypr"
+    
+    mkdir -p "$target"
+    
+    for file in "$config_dir"/*; do
+      local basename=$(basename "$file")
+      if [ "$basename" != "monitors.conf" ]; then
+        ln -sfn "$file" "$target/$basename"
+      fi
+    done
+    
+    local primary_name=$(get_monitor primary name)
+    local primary_res=$(get_monitor primary resolution)
+    local primary_rate=$(get_monitor primary refreshRate)
+    local secondary_name=$(get_monitor secondary name)
+    local secondary_res=$(get_monitor secondary resolution)
+    local secondary_rate=$(get_monitor secondary refreshRate)
+    
+    if [ -n "$primary_name" ]; then
+      cat > "$target/monitors.conf" << EOF
+monitor = $primary_name, $primary_res@$primary_rate, 0x0, 1
+monitor = $secondary_name, $secondary_res@$secondary_rate, 1920x0, 1
+
+workspace = 1, monitor:$primary_name
+workspace = 2, monitor:$primary_name
+workspace = 3, monitor:$primary_name
+workspace = 4, monitor:$primary_name
+workspace = 5, monitor:$primary_name
+workspace = 6, monitor:$secondary_name
+workspace = 7, monitor:$secondary_name
+workspace = 8, monitor:$secondary_name
+workspace = 9, monitor:$secondary_name
+workspace = 10, monitor:$secondary_name
+EOF
+      echo " -> hypr (with generated monitors.conf)"
+    else
+      echo " ! hypr: Could not read monitors for host '$HOSTNAME'"
+    fi
+  }
+
+  sync_waybar() {
+    local config_dir="$AMBER_ROOT/domains/bar/waybar/config"
+    local target="/home/joao/.config/waybar"
+    
+    mkdir -p "$target"
+    
+    ln -sfn "$config_dir/style.css" "$target/style.css"
+    ln -sfn "$config_dir/colors.css" "$target/colors.css"
+    
+    local primary_name=$(get_monitor primary name)
+    local secondary_name=$(get_monitor secondary name)
+    
+    if [ -n "$primary_name" ] && [ -f "$config_dir/config" ]; then
+      ${pkgs.gnused}/bin/sed \
+        -e "s/\"output\": \"[^\"]*\"/\"output\": \"$primary_name\"/1" \
+        "$config_dir/config" | \
+      ${pkgs.python3}/bin/python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+data[0]['output'] = '$primary_name'
+data[0]['hyprland/workspaces']['persistent-workspaces'] = {'$primary_name': [1,2,3,4,5]}
+if len(data) > 1:
+    data[1]['output'] = '$secondary_name'
+    data[1]['hyprland/workspaces']['persistent-workspaces'] = {'$secondary_name': [6,7,8,9,10]}
+print(json.dumps(data, indent=2))
+" > "$target/config"
+      echo " -> waybar (with generated config)"
+    else
+      echo " ! waybar: Could not read monitors for host '$HOSTNAME'"
+    fi
+  }
+
+  sync_configs() {
+    echo "Syncing configurations for host '$HOSTNAME'..."
+    echo ""
+    
+    for config_dir in "$AMBER_ROOT"/domains/*/*/config "$AMBER_ROOT"/capabilities/*/config; do
       if [ -d "$config_dir" ]; then
+        app_name=$(basename "$(dirname "$config_dir")")
+        target_name=$(get_target_name "$app_name")
+        target="/home/joao/.config/$target_name"
         
-        app_name=$(basename $(dirname "$config_dir"))
-        target_name="$app_name"
+        if needs_special_sync "$app_name"; then
+          case "$app_name" in
+            hyprland) sync_hyprland ;;
+            waybar) sync_waybar ;;
+          esac
+          continue
+        fi
+        
+        if [ -L "$target" ]; then
+          rm "$target"
+        elif [ -d "$target" ]; then
+          echo " ! $target_name exists as directory, skipping"
+          continue
+        fi
+        
+        ln -sfn "$config_dir" "$target"
+        echo " -> $target_name"
+      fi
+    done
+    
+    if [ -f "$AMBER_ROOT/domains/shell/nushell/config/starship.toml" ]; then
+      ln -sfn "$AMBER_ROOT/domains/shell/nushell/config/starship.toml" "/home/joao/.config/starship.toml"
+      echo " -> starship.toml"
+    fi
+    
+    echo ""
+    echo "Done. Configs synced."
+  }
 
-        case "$app_name" in
-          hyprland) target_name="hypr" ;;
-        esac
-
-        TARGET="/home/joao/.config/$target_name"
-
-        if [ "$app_name" = "claude" ]; then
-          mkdir -p "$TARGET"
-          for file in "$config_dir"/*; do
-            if [ -f "$file" ]; then
-              ln -sfn "$file" "$TARGET/$(basename "$file")"
-              echo " -> Linked claude/$(basename "$file")"
-            fi
-          done
+  status_configs() {
+    echo "Amber Config Status (host: $HOSTNAME)"
+    echo "======================================="
+    echo ""
+    
+    for config_dir in "$AMBER_ROOT"/domains/*/*/config "$AMBER_ROOT"/capabilities/*/config; do
+      if [ -d "$config_dir" ]; then
+        app_name=$(basename "$(dirname "$config_dir")")
+        target_name=$(get_target_name "$app_name")
+        target="/home/joao/.config/$target_name"
+        
+        if needs_special_sync "$app_name"; then
+          if [ -d "$target" ]; then
+            echo " [ok] $target_name (mixed: symlinks + generated)"
+          else
+            echo " [--] $target_name (not synced)"
+          fi
+        elif [ -L "$target" ]; then
+          link_target=$(readlink "$target")
+          if [ "$link_target" = "$config_dir" ]; then
+            echo " [ok] $target_name"
+          else
+            echo " [!!] $target_name (wrong target)"
+          fi
+        elif [ -d "$target" ]; then
+          echo " [!!] $target_name (directory, not synced)"
         else
-          ln -sfn "$config_dir" "$TARGET"
-          echo " -> Linked $target_name"
+          echo " [--] $target_name (not linked)"
         fi
       fi
     done
+  }
 
-    if [ -f "/home/joao/.config/amber/domains/shell/nushell/config/starship.toml" ]; then
-      ln -sfn "/home/joao/.config/amber/domains/shell/nushell/config/starship.toml" "/home/joao/.config/starship.toml"
-      echo " -> Linked starship.toml"
-    fi
+  COMMAND=$1
 
-    echo ""
-    echo "Done. You are now live-editing your repository."
-
-  elif [ "$COMMAND" = "lock" ]; then
-    echo "Locking system: Restoring Nix immutable configurations..."
-    
-    if [ -L "/home/joao/.config/claude" ]; then
-      rm /home/joao/.config/claude
-      mkdir -p /home/joao/.config/claude
-    fi
-    
-    HOSTNAME=$(hostname)
-    home-manager switch --flake "/home/joao/.config/amber#joao@$HOSTNAME" -b backup
-    
-    echo ""
-    echo "Done. System state is secure."
-
-  elif [ "$COMMAND" = "clean" ]; then
-    echo "Cleaning up legacy home-manager artifacts..."
-    
-    if [ -d "/home/joao/.local/bin" ]; then
-      rm -rf /home/joao/.local/bin
-      echo " -> Removed ~/.local/bin"
-    fi
-    
-    if [ -d "/home/joao/.local/state/home-manager" ]; then
-      rm -rf /home/joao/.local/state/home-manager
-      echo " -> Removed ~/.local/state/home-manager"
-    fi
-    
-    if nix-env -q 2>/dev/null | grep -q .; then
-      echo " -> Removing nix-env packages..."
-      nix-env -e '.*'
-    fi
-    
-    find /home/joao/.config -name "*.backup" -type f -delete 2>/dev/null
-    echo " -> Removed .backup files"
-    
-    echo ""
-    echo "Done. Run 'amber lock' to restore clean state."
-
-  else
-    echo "Amber CLI"
-    echo "Usage: amber <command>"
-    echo ""
-    echo "Commands:"
-    echo "  dev   - Auto-link all repo configs to ~/.config (Live 0ms iteration)"
-    echo "  lock  - Run home-manager switch to restore immutable Nix safety"
-    echo "  clean - Remove legacy artifacts from old home-manager setup"
-  fi
+  case "$COMMAND" in
+    sync)
+      sync_configs
+      ;;
+    status)
+      status_configs
+      ;;
+    *)
+      echo "Amber - Config Management"
+      echo ""
+      echo "Usage: amber <command>"
+      echo ""
+      echo "Commands:"
+      echo "  sync   - Link repo configs + generate host-specific files"
+      echo "  status - Show sync status of all configs"
+      echo ""
+      echo "Versioning: Use git directly in ~/.config/amber/"
+      echo "  git diff           - See uncommitted changes"
+      echo "  git commit -am ''  - Save a checkpoint"
+      echo "  git log --oneline  - List checkpoints"
+      echo "  git checkout <id> -- domains/<app>/config/  - Restore"
+      ;;
+  esac
 ''

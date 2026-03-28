@@ -3,7 +3,6 @@
 HOSTNAME=$(hostname)
 HOST_DIR="hosts/$HOSTNAME"
 
-# Initialize host if it doesn't exist
 if [ ! -d "$HOST_DIR" ]; then
   echo "Host '$HOSTNAME' not found. Initializing..."
   ./init-host.sh
