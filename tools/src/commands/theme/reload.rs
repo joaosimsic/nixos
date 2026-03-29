@@ -94,42 +94,23 @@ fn reload_zellij() {
 }
 
 fn restart_ghostty() {
-    if std::env::var("ZELLIJ").is_ok() {
-        if let Ok(session) = std::env::var("ZELLIJ_SESSION_NAME") {
-            let _ = std::fs::write("/tmp/amber-zellij-reattach", session);
-        }
-    }
-
-    let pids: Vec<String> = Command::new("pgrep")
+    let running = Command::new("pgrep")
         .arg("-x")
         .arg("ghostty")
-        .output()
-        .map(|o| {
-            String::from_utf8_lossy(&o.stdout)
-                .lines()
-                .map(|l| l.trim().to_string())
-                .filter(|l| !l.is_empty())
-                .collect()
-        })
-        .unwrap_or_default();
+        .stdout(Stdio::null())
+        .status()
+        .map(|s| s.success())
+        .unwrap_or(false);
 
-    if pids.is_empty() {
-        println!("  restart zellij to apply theme");
-        return;
+    if running {
+        let _ = Command::new("pkill")
+            .arg("-SIGUSR2")
+            .arg("-x")
+            .arg("ghostty")
+            .stdout(Stdio::null())
+            .stderr(Stdio::null())
+            .status();
+
+        println!("  ghostty reloaded");
     }
-
-    let _ = Command::new("hyprctl")
-        .args(["dispatch", "exec", "ghostty"])
-        .stdout(Stdio::null())
-        .stderr(Stdio::null())
-        .status();
-
-    let kill_cmd = format!("sleep 1; kill {}", pids.join(" "));
-    let _ = Command::new("systemd-run")
-        .args(["--user", "--no-block", "--", "sh", "-c", &kill_cmd])
-        .stdout(Stdio::null())
-        .stderr(Stdio::null())
-        .status();
-
-    println!("  ghostty restarting...");
 }
