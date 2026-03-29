@@ -209,7 +209,7 @@ print(json.dumps(data, indent=2))
       exec ${amber-cli}/bin/amber "$@"
       ;;
     sync)
-      sync_configs
+      exec ${amber-cli}/bin/amber sync
       ;;
     status)
       status_configs
