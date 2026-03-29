@@ -22,6 +22,13 @@ fn reload_hyprland(p: &Palette) {
             .stderr(Stdio::null())
             .status();
     }
+
+    let _ = Command::new("hyprctl")
+        .arg("reload")
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
+        .status();
+
     println!("  hyprland reloaded");
 }
 
@@ -84,7 +91,6 @@ fn reload_zellij() {
     }
 
     let _ = Command::new("pkill")
-        .arg("-x")
         .arg("zellij")
         .stdout(Stdio::null())
         .stderr(Stdio::null())
@@ -94,16 +100,13 @@ fn reload_zellij() {
 }
 
 fn restart_ghostty() {
-    let status = Command::new("sh")
+    let _ = Command::new("sh")
         .arg("-c")
         .arg("pkill -USR2 ghostty")
         .stdout(Stdio::null())
         .stderr(Stdio::null())
         .status();
 
-    if status.map(|s| s.success()).unwrap_or(false) {
-        println!("  ghostty reloaded");
-    } else {
-        println!("  [error] ghostty reload command failed");
-    }
+    println!("  ghostty reloaded");
+    println!("  [error] ghostty reload command failed");
 }
