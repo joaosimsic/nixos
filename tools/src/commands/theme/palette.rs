@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use anyhow::{bail, Result};
 
 pub struct Palette {
@@ -25,6 +26,52 @@ pub struct Palette {
 }
 
 impl Palette {
+    pub fn as_map(&self) -> HashMap<String, String> {
+        let mut map = HashMap::new();
+
+        let colors = [
+            ("BASE", &self.base),
+            ("BRIGHT", &self.bright),
+            ("DIM", &self.dim),
+            ("SURFACE", &self.surface),
+            ("BG", &self.bg),
+            ("BLACK", &self.black),
+            ("COMMENT", &self.comment),
+            ("RED", &self.red),
+            ("RED_BRIGHT", &self.red_bright),
+            ("GREEN", &self.green),
+            ("GREEN_BRIGHT", &self.green_bright),
+            ("YELLOW", &self.yellow),
+            ("YELLOW_BRIGHT", &self.yellow_bright),
+            ("BLUE", &self.blue),
+            ("BLUE_BRIGHT", &self.blue_bright),
+            ("MAGENTA", &self.magenta),
+            ("MAGENTA_BRIGHT", &self.magenta_bright),
+            ("CYAN", &self.cyan),
+            ("CYAN_BRIGHT", &self.cyan_bright),
+            ("ERROR", &self.error),
+            ("ERROR_BRIGHT", &self.error_bright),
+        ];
+
+        for (name, value) in colors {
+            map.insert(name.to_string(), value.clone());
+            map.insert(format!("{}_RGB", name), Self::rgb_dec(value));
+        }
+
+        let p_aliases = [
+            ("P0", &self.black), ("P1", &self.red), ("P2", &self.green), ("P3", &self.yellow),
+            ("P4", &self.blue), ("P5", &self.magenta), ("P6", &self.cyan), ("P7", &self.base),
+            ("P8", &self.dim), ("P9", &self.red_bright), ("P10", &self.green_bright), ("P11", &self.yellow_bright),
+            ("P12", &self.blue_bright), ("P13", &self.magenta_bright), ("P14", &self.cyan_bright), ("P15", &self.bright),
+        ];
+
+        for (name, value) in p_aliases {
+            map.insert(name.to_string(), value.clone());
+        }
+
+        map
+    }
+
     pub fn from_hex(hex: &str) -> Result<Self> {
         let hex = hex.trim_start_matches('#');
         if hex.len() != 6 {
@@ -114,7 +161,11 @@ fn hls_to_rgb(h: f64, l: f64, s: f64) -> (f64, f64, f64) {
     if s.abs() < f64::EPSILON {
         return (l, l, l);
     }
-    let m2 = if l <= 0.5 { l * (1.0 + s) } else { l + s - l * s };
+    let m2 = if l <= 0.5 {
+        l * (1.0 + s)
+    } else {
+        l + s - l * s
+    };
     let m1 = 2.0 * l - m2;
     (
         hue_to_rgb(m1, m2, h + 1.0 / 3.0),
