@@ -234,6 +234,17 @@ print(f"P14='{cyan_bright}'")
 
 print(f"P15='{bright}'")
 
+
+# Zellij RGB decimals
+def to_dec(h):
+    return f"{int(h[0:2],16)} {int(h[2:4],16)} {int(h[4:6],16)}"
+
+print(f"BASE_RGB='{to_dec(base)}'")
+print(f"BRIGHT_RGB='{to_dec(bright)}'")
+print(f"DIM_RGB='{to_dec(dim)}'")
+print(f"BLACK_RGB='{to_dec(black)}'")
+print(f"RED_RGB='{to_dec(red)}'")
+
 PYEOF
 
 )"
@@ -426,21 +437,6 @@ if [ -f "$NVIM_TEMPLATE" ]; then
 
     
 
-    # Reload Neovim Theme Live
-
-    if command -v nvim >/dev/null 2>&1; then
-
-        (
-            shopt -s nullglob
-            for server in "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"/nvim.*.0; do
-                nvim --server "$server" --remote-expr \
-                    'luaeval("package.loaded[\"config.theme\"] = nil; require(\"config.theme\"); 1")' \
-                    >/dev/null 2>&1 || true
-            done
-        )
-
-    fi
-
 fi
 
 
@@ -464,22 +460,75 @@ if [ -f "$LAZYGIT_TEMPLATE" ]; then
 fi
 
 
+# ── 13. Generate Zellij config ───────────────────────────────────────────────
+
+
+ZELLIJ_TEMPLATE="$DOTFILES/domains/terminal/zellij/config/config.kdl.template"
+
+ZELLIJ_CONFIG="$DOTFILES/domains/terminal/zellij/config/config.kdl"
+
+
+if [ -f "$ZELLIJ_TEMPLATE" ]; then
+
+    sed \
+        -e "s/{{BASE_RGB}}/$BASE_RGB/g" \
+        -e "s/{{BRIGHT_RGB}}/$BRIGHT_RGB/g" \
+        -e "s/{{DIM_RGB}}/$DIM_RGB/g" \
+        -e "s/{{BLACK_RGB}}/$BLACK_RGB/g" \
+        -e "s/{{RED_RGB}}/$RED_RGB/g" \
+        "$ZELLIJ_TEMPLATE" > "$ZELLIJ_CONFIG"
+
+    cp "$ZELLIJ_CONFIG" "$HOME/.config/zellij/config.kdl"
+
+fi
+
+
 echo "Done. Color files generated."
 
 
-# ── 13. Reload running apps ───────────────────────────────────────────────────
+# ── 14. Find current Ghostty and Zellij PIDs ─────────────────────────────────
 
 
-if command -v hyprctl >/dev/null 2>&1; then
-    hyprctl reload &>/dev/null && echo "  hyprland reloaded" || true
-fi
+OLD_GHOSTTY_PIDS=$(pgrep -x ghostty 2>/dev/null | tr '\n' ' ' || true)
 
-if pgrep -x waybar >/dev/null 2>&1; then
-    pkill -SIGUSR2 waybar && echo "  waybar reloaded" || true
-fi
 
-if command -v makoctl >/dev/null 2>&1; then
-    makoctl reload &>/dev/null && echo "  mako reloaded" || true
+# ── 15. Reload running apps (parallel) ───────────────────────────────────────
+
+
+{
+    if command -v hyprctl >/dev/null 2>&1; then
+        hyprctl keyword general:col.active_border   "rgba(${BASE}ff)"   &>/dev/null
+        hyprctl keyword general:col.inactive_border "rgba(${DIM}ff)"    &>/dev/null
+        hyprctl keyword misc:background_color       "rgba(${BLACK}ff)"  &>/dev/null
+        echo "  hyprland reloaded"
+    fi
+} &
+
+{
+    if pgrep waybar >/dev/null 2>&1; then
+        pkill waybar
+        waybar &>/dev/null &
+        echo "  waybar restarted"
+    fi
+} &
+
+{
+    if command -v makoctl >/dev/null 2>&1; then
+        makoctl reload &>/dev/null && echo "  mako reloaded" || true
+    fi
+} &
+
+wait
+
+
+# ── 16. Restart Ghostty ───────────────────────────────────────────────────────
+
+
+if [ -n "$OLD_GHOSTTY_PIDS" ]; then
+    [ -n "${ZELLIJ:-}" ] && echo "$ZELLIJ_SESSION_NAME" > /tmp/amber-zellij-reattach
+    hyprctl dispatch exec ghostty &>/dev/null
+    systemd-run --user --no-block -- sh -c "sleep 1; kill $OLD_GHOSTTY_PIDS" &>/dev/null
+    echo "  ghostty restarting..."
 fi
 
 

@@ -1,0 +1,5 @@
+@define-color base   #{{BASE}};
+@define-color bright #{{BRIGHT}};
+@define-color dim    #{{DIM}};
+@define-color bg     #{{BG}};
+@define-color black  #{{BLACK}};

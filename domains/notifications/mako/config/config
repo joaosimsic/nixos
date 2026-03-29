@@ -3,9 +3,9 @@
 # Generated from config.template by set-theme.sh — do not edit manually.
 
 font=JetBrains Mono Bold 10
-background-color=#0a0400
-text-color=#ff6600
-border-color=#ff6600
+background-color=0a0a0a
+text-color=eeeeee
+border-color=eeeeee
 border-size=1
 border-radius=0
 padding=4,8

@@ -1,5 +1,13 @@
 { pkgs }:
 
+let
+  amber-cli = pkgs.rustPlatform.buildRustPackage {
+    pname = "amber-cli";
+    version = "0.1.0";
+    src = ../tools;
+    cargoLock.lockFile = ../tools/Cargo.lock;
+  };
+in
 pkgs.writeShellScriptBin "amber" ''
   AMBER_ROOT="/home/joao/.config/amber"
   HOSTNAME=$(hostname)
@@ -197,6 +205,9 @@ print(json.dumps(data, indent=2))
   COMMAND=$1
 
   case "$COMMAND" in
+    theme)
+      exec ${amber-cli}/bin/amber "$@"
+      ;;
     sync)
       sync_configs
       ;;
@@ -209,6 +220,7 @@ print(json.dumps(data, indent=2))
       echo "Usage: amber <command>"
       echo ""
       echo "Commands:"
+      echo "  theme  - Set color theme"
       echo "  sync   - Link repo configs + generate host-specific files"
       echo "  status - Show sync status of all configs"
       echo ""

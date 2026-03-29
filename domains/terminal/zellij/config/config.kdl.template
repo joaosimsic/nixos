@@ -250,125 +250,125 @@ keybinds clear-defaults=true {
 themes {
     custom {
         text_unselected {
-            base 235 235 235
-            background 10 10 10
-            emphasis_0 238 238 238
-            emphasis_1 238 238 238
-            emphasis_2 238 238 238
-            emphasis_3 235 235 235
+            base {{BRIGHT_RGB}}
+            background {{BLACK_RGB}}
+            emphasis_0 {{BASE_RGB}}
+            emphasis_1 {{BASE_RGB}}
+            emphasis_2 {{BASE_RGB}}
+            emphasis_3 {{BRIGHT_RGB}}
         }
         text_selected {
-            base 235 235 235
-            background 10 10 10
-            emphasis_0 238 238 238
-            emphasis_1 238 238 238
-            emphasis_2 238 238 238
-            emphasis_3 235 235 235
+            base {{BRIGHT_RGB}}
+            background {{BLACK_RGB}}
+            emphasis_0 {{BASE_RGB}}
+            emphasis_1 {{BASE_RGB}}
+            emphasis_2 {{BASE_RGB}}
+            emphasis_3 {{BRIGHT_RGB}}
         }
         ribbon_selected {
-            base 10 10 10
-            background 238 238 238
-            emphasis_0 107 107 107
-            emphasis_1 238 238 238
-            emphasis_2 235 235 235
-            emphasis_3 238 238 238
+            base {{BLACK_RGB}}
+            background {{BASE_RGB}}
+            emphasis_0 {{DIM_RGB}}
+            emphasis_1 {{BASE_RGB}}
+            emphasis_2 {{BRIGHT_RGB}}
+            emphasis_3 {{BASE_RGB}}
         }
         ribbon_unselected {
-            base 10 10 10
-            background 238 238 238
-            emphasis_0 107 107 107
-            emphasis_1 235 235 235
-            emphasis_2 238 238 238
-            emphasis_3 235 235 235
+            base {{BLACK_RGB}}
+            background {{BASE_RGB}}
+            emphasis_0 {{DIM_RGB}}
+            emphasis_1 {{BRIGHT_RGB}}
+            emphasis_2 {{BASE_RGB}}
+            emphasis_3 {{BRIGHT_RGB}}
         }
         table_title {
-            base 238 238 238
+            base {{BASE_RGB}}
             background 0
-            emphasis_0 238 238 238
-            emphasis_1 238 238 238
-            emphasis_2 238 238 238
-            emphasis_3 235 235 235
+            emphasis_0 {{BASE_RGB}}
+            emphasis_1 {{BASE_RGB}}
+            emphasis_2 {{BASE_RGB}}
+            emphasis_3 {{BRIGHT_RGB}}
         }
         table_cell_selected {
-            base 235 235 235
-            background 10 10 10
-            emphasis_0 238 238 238
-            emphasis_1 238 238 238
-            emphasis_2 238 238 238
-            emphasis_3 235 235 235
+            base {{BRIGHT_RGB}}
+            background {{BLACK_RGB}}
+            emphasis_0 {{BASE_RGB}}
+            emphasis_1 {{BASE_RGB}}
+            emphasis_2 {{BASE_RGB}}
+            emphasis_3 {{BRIGHT_RGB}}
         }
         table_cell_unselected {
-            base 235 235 235
-            background 10 10 10
-            emphasis_0 238 238 238
-            emphasis_1 238 238 238
-            emphasis_2 238 238 238
-            emphasis_3 235 235 235
+            base {{BRIGHT_RGB}}
+            background {{BLACK_RGB}}
+            emphasis_0 {{BASE_RGB}}
+            emphasis_1 {{BASE_RGB}}
+            emphasis_2 {{BASE_RGB}}
+            emphasis_3 {{BRIGHT_RGB}}
         }
         list_selected {
-            base 235 235 235
-            background 10 10 10
-            emphasis_0 238 238 238
-            emphasis_1 238 238 238
-            emphasis_2 238 238 238
-            emphasis_3 235 235 235
+            base {{BRIGHT_RGB}}
+            background {{BLACK_RGB}}
+            emphasis_0 {{BASE_RGB}}
+            emphasis_1 {{BASE_RGB}}
+            emphasis_2 {{BASE_RGB}}
+            emphasis_3 {{BRIGHT_RGB}}
         }
         list_unselected {
-            base 235 235 235
-            background 10 10 10
-            emphasis_0 238 238 238
-            emphasis_1 238 238 238
-            emphasis_2 238 238 238
-            emphasis_3 235 235 235
+            base {{BRIGHT_RGB}}
+            background {{BLACK_RGB}}
+            emphasis_0 {{BASE_RGB}}
+            emphasis_1 {{BASE_RGB}}
+            emphasis_2 {{BASE_RGB}}
+            emphasis_3 {{BRIGHT_RGB}}
         }
         frame_selected {
-            base 238 238 238
-            background 10 10 10
-            emphasis_0 238 238 238
-            emphasis_1 238 238 238
-            emphasis_2 238 238 238
-            emphasis_3 238 238 238
+            base {{BASE_RGB}}
+            background {{BLACK_RGB}}
+            emphasis_0 {{BASE_RGB}}
+            emphasis_1 {{BASE_RGB}}
+            emphasis_2 {{BASE_RGB}}
+            emphasis_3 {{BASE_RGB}}
         }
         frame_unselected {
-            base 107 107 107
-            background 10 10 10
-            emphasis_0 107 107 107
-            emphasis_1 107 107 107
-            emphasis_2 107 107 107
-            emphasis_3 107 107 107
+            base {{DIM_RGB}}
+            background {{BLACK_RGB}}
+            emphasis_0 {{DIM_RGB}}
+            emphasis_1 {{DIM_RGB}}
+            emphasis_2 {{DIM_RGB}}
+            emphasis_3 {{DIM_RGB}}
         }
         frame_highlight {
-            base 238 238 238
-            background 10 10 10
-            emphasis_0 238 238 238
-            emphasis_1 238 238 238
-            emphasis_2 238 238 238
-            emphasis_3 238 238 238
+            base {{BASE_RGB}}
+            background {{BLACK_RGB}}
+            emphasis_0 {{BASE_RGB}}
+            emphasis_1 {{BASE_RGB}}
+            emphasis_2 {{BASE_RGB}}
+            emphasis_3 {{BASE_RGB}}
         }
         exit_code_success {
-            base 238 238 238
+            base {{BASE_RGB}}
             background 0
-            emphasis_0 238 238 238
-            emphasis_1 10 10 10
-            emphasis_2 235 235 235
-            emphasis_3 238 238 238
+            emphasis_0 {{BASE_RGB}}
+            emphasis_1 {{BLACK_RGB}}
+            emphasis_2 {{BRIGHT_RGB}}
+            emphasis_3 {{BASE_RGB}}
         }
         exit_code_error {
-            base 155 155 155
+            base {{RED_RGB}}
             background 0
-            emphasis_0 235 235 235
+            emphasis_0 {{BRIGHT_RGB}}
             emphasis_1 0
             emphasis_2 0
             emphasis_3 0
         }
         multiplayer_user_colors {
-            player_1 235 235 235
-            player_2 238 238 238
+            player_1 {{BRIGHT_RGB}}
+            player_2 {{BASE_RGB}}
             player_3 0
-            player_4 235 235 235
-            player_5 238 238 238
+            player_4 {{BRIGHT_RGB}}
+            player_5 {{BASE_RGB}}
             player_6 0
-            player_7 107 107 107
+            player_7 {{DIM_RGB}}
             player_8 0
             player_9 0
             player_10 0

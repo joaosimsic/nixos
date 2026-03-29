@@ -11,3 +11,4 @@ paste-cache
 image-cache
 projects
 history.jsonl
+shell-snapshots

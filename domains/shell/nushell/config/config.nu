@@ -35,7 +35,17 @@ $env.config = {
     error_style: "fancy"
 
     hooks: {
-        pre_prompt: []
+        pre_prompt: [
+            { ||
+                if (not ($env | get -o ZELLIJ | is-not-empty)) and ("/tmp/amber-zellij-reattach" | path exists) {
+                    let session = (open /tmp/amber-zellij-reattach | str trim)
+                    rm /tmp/amber-zellij-reattach
+                    do -i { ^pkill -x zellij }
+                    sleep 500ms
+                    ^zellij attach $session
+                }
+            }
+        ]
         pre_execution: []
         env_change: {}
     }
