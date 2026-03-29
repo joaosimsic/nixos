@@ -94,23 +94,14 @@ fn reload_zellij() {
 }
 
 fn restart_ghostty() {
-    let running = Command::new("pgrep")
-        .arg("-x")
+    let status = Command::new("pkill")
+        .arg("-SIGUSR2")
         .arg("ghostty")
         .stdout(Stdio::null())
-        .status()
-        .map(|s| s.success())
-        .unwrap_or(false);
+        .stderr(Stdio::null())
+        .status();
 
-    if running {
-        let _ = Command::new("pkill")
-            .arg("-SIGUSR2")
-            .arg("-x")
-            .arg("ghostty")
-            .stdout(Stdio::null())
-            .stderr(Stdio::null())
-            .status();
-
+    if status.map(|s| s.success()).unwrap_or(false) {
         println!("  ghostty reloaded");
     }
 }
