@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use anyhow::{bail, Result};
+use std::collections::HashMap;
 
 pub struct Palette {
     pub base: String,
@@ -59,10 +59,22 @@ impl Palette {
         }
 
         let p_aliases = [
-            ("P0", &self.black), ("P1", &self.red), ("P2", &self.green), ("P3", &self.yellow),
-            ("P4", &self.blue), ("P5", &self.magenta), ("P6", &self.cyan), ("P7", &self.base),
-            ("P8", &self.dim), ("P9", &self.red_bright), ("P10", &self.green_bright), ("P11", &self.yellow_bright),
-            ("P12", &self.blue_bright), ("P13", &self.magenta_bright), ("P14", &self.cyan_bright), ("P15", &self.bright),
+            ("P0", &self.black),
+            ("P1", &self.red),
+            ("P2", &self.green),
+            ("P3", &self.yellow),
+            ("P4", &self.blue),
+            ("P5", &self.magenta),
+            ("P6", &self.cyan),
+            ("P7", &self.base),
+            ("P8", &self.dim),
+            ("P9", &self.red_bright),
+            ("P10", &self.green_bright),
+            ("P11", &self.yellow_bright),
+            ("P12", &self.blue_bright),
+            ("P13", &self.magenta_bright),
+            ("P14", &self.cyan_bright),
+            ("P15", &self.bright),
         ];
 
         for (name, value) in p_aliases {

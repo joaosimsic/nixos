@@ -54,4 +54,3 @@ fn substitute(template: &str, vars: &HashMap<String, String>) -> String {
     }
     out
 }
-

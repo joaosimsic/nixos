@@ -3,7 +3,12 @@ mod commands;
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
-#[command(name = "amber", about = "Amber manager")]
+#[command(name = "amber", about = "Amber - Config Management")]
+#[command(after_help = "Versioning: Use git directly in ~/.config/amber/
+  git diff                              - See uncommitted changes
+  git commit -am 'message'              - Save a checkpoint
+  git log --oneline                     - List checkpoints
+  git checkout <id> -- domains/<app>/config  - Restore")]
 struct Cli {
     #[command(subcommand)]
     command: Commands,
@@ -11,12 +16,16 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
+    /// Set color theme
     Theme {
         color: Option<String>,
         #[arg(long)]
         dry_run: bool,
     },
+    /// Link repo configs + generate host-specific files
     Sync,
+    /// Show sync status of all configs
+    Status,
 }
 
 fn main() -> anyhow::Result<()> {
@@ -24,6 +33,6 @@ fn main() -> anyhow::Result<()> {
     match cli.command {
         Commands::Theme { color, dry_run } => commands::theme::run(color, dry_run),
         Commands::Sync => commands::sync::run(),
+        Commands::Status => commands::sync::status(),
     }
 }
-

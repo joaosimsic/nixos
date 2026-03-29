@@ -96,7 +96,7 @@ fn reload_zellij() {
 fn restart_ghostty() {
     let status = Command::new("sh")
         .arg("-c")
-        .arg("pkill -USR2 ghostty") 
+        .arg("pkill -USR2 ghostty")
         .stdout(Stdio::null())
         .stderr(Stdio::null())
         .status();

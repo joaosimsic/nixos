@@ -1,7 +1,7 @@
 mod palette;
-mod templates;
 #[cfg(target_os = "linux")]
 mod reload;
+mod templates;
 
 use anyhow::{Context, Result};
 use palette::Palette;
@@ -63,7 +63,11 @@ fn read_theme(path: &PathBuf) -> Result<String> {
     let content = std::fs::read_to_string(path).context("reading theme file")?;
     for line in content.lines() {
         if let Some(rest) = line.strip_prefix("base") {
-            let hex = rest.trim().trim_start_matches('=').trim().trim_start_matches('#');
+            let hex = rest
+                .trim()
+                .trim_start_matches('=')
+                .trim()
+                .trim_start_matches('#');
             return Ok(hex.to_string());
         }
     }
