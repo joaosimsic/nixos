@@ -94,14 +94,16 @@ fn reload_zellij() {
 }
 
 fn restart_ghostty() {
-    let status = Command::new("pkill")
-        .arg("-SIGUSR2")
-        .arg("ghostty")
+    let status = Command::new("sh")
+        .arg("-c")
+        .arg("pkill -USR2 ghostty") 
         .stdout(Stdio::null())
         .stderr(Stdio::null())
         .status();
 
     if status.map(|s| s.success()).unwrap_or(false) {
         println!("  ghostty reloaded");
+    } else {
+        println!("  [error] ghostty reload command failed");
     }
 }
