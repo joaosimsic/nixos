@@ -90,13 +90,16 @@ fn reload_zellij() {
         }
     }
 
-    let _ = Command::new("pkill")
-        .arg("zellij")
-        .stdout(Stdio::null())
-        .stderr(Stdio::null())
-        .status();
-
-    println!("  zellij sessions cleared");
+    if std::env::var("ZELLIJ").is_err() {
+        let _ = Command::new("pkill")
+            .arg("zellij")
+            .stdout(Stdio::null())
+            .stderr(Stdio::null())
+            .status();
+        println!("  zellij sessions cleared");
+    } else {
+        println!("  zellij cache cleared (skipped pkill because we are inside zellij)");
+    }
 }
 
 fn restart_ghostty() {
@@ -108,5 +111,4 @@ fn restart_ghostty() {
         .status();
 
     println!("  ghostty reloaded");
-    println!("  [error] ghostty reload command failed");
 }
