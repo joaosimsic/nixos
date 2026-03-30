@@ -1,5 +1,18 @@
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum SessionStatus {
+    Current,
+    Detached,
+    Exited,
+}
+
+#[derive(Debug)]
+pub struct SessionInfo {
+    pub name: String,
+    pub status: SessionStatus,
+}
+
 pub struct SessionMetadata {
-    pub _name: String,
+    pub name: String,
     pub cwd: String,
     pub tabs: usize,
     pub branch: Option<String>,

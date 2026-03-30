@@ -1,30 +1,33 @@
 use anyhow::{Context, Result};
 use std::process::Command;
 
-#[derive(Debug, Clone)]
-pub struct ZellijSession {
-    pub name: String,
-    pub is_current: bool,
-    pub is_exited: bool,
+use crate::commands::grave::types::{SessionInfo, SessionStatus};
+
+pub fn is_available() -> bool {
+    Command::new("zellij").arg("--version").output().is_ok()
 }
 
-pub fn get_sessions() -> Vec<ZellijSession> {
+pub fn list_sessions() -> Result<Vec<SessionInfo>> {
     let output = Command::new("zellij")
         .args(["list-sessions", "--no-formatting"])
         .output()
-        .expect("Failed to execute zellij");
-
+        .context("Failed to execute 'zellij list-sessions --no-formatting'")?;
+    if !output.status.success() {
+        anyhow::bail!(
+            "zellij list-sessions failed: {}",
+            String::from_utf8_lossy(&output.stderr).trim()
+        );
+    }
     let stdout = String::from_utf8_lossy(&output.stdout);
-
-    stdout
+    let sessions = stdout
         .lines()
-        .filter(|line| !line.trim().is_empty())
-        .map(|line| ZellijSession {
+        .filter(|l| !l.trim().is_empty())
+        .map(|line| SessionInfo {
             name: parse_name(line),
-            is_current: line.contains("(current)"),
-            is_exited: line.contains("EXITED"),
+            status: parse_status(line),
         })
-        .collect()
+        .collect();
+    Ok(sessions)
 }
 
 fn parse_name(line: &str) -> String {
@@ -34,38 +37,105 @@ fn parse_name(line: &str) -> String {
         .to_string()
 }
 
+fn parse_status(line: &str) -> SessionStatus {
+    if line.contains("current") {
+        SessionStatus::Current
+    } else if line.contains("EXITED") {
+        SessionStatus::Exited
+    } else {
+        SessionStatus::Detached
+    }
+}
+
 pub fn attach_session(name: &str) -> Result<()> {
-    Command::new("zellij")
+    let status = Command::new("zellij")
         .args(["attach", name])
         .status()
-        .context(format!("Failed to attach to session '{}'", name))?;
+        .context(format!("Failed to run zellij attach for '{}'", name))?;
+    if !status.success() {
+        anyhow::bail!("zellij attach failed for '{}'", name);
+    }
     Ok(())
 }
 
 pub fn switch_session(name: &str) -> Result<()> {
-    Command::new("zellij")
+    let status = Command::new("zellij")
         .args(["action", "switch-session", name])
         .status()
-        .context(format!("Failed to switch to session '{}'", name))?;
+        .context(format!("Failed to run zellij switch-session for '{}'", name))?;
+    if !status.success() {
+        anyhow::bail!("zellij switch-session failed for '{}'", name);
+    }
     Ok(())
 }
 
 pub fn delete_session_force(name: &str) -> Result<()> {
-    Command::new("zellij")
+    let _ = Command::new("zellij")
         .args(["delete-session", "--force", name])
-        .status()
-        .context(format!("Failed to force delete session '{}'", name))?;
+        .status();
     Ok(())
 }
 
-pub fn kill_session(name: &str) -> Result<()> {
-    let status = Command::new("zellij")
+pub fn kill_session(name: &str) {
+    let _ = Command::new("zellij")
         .args(["kill-session", name])
-        .status()
-        .context("Failed to kill session")?;
+        .status();
+}
 
+pub fn launch_session_manager_plugin() -> Result<()> {
+    let status = Command::new("zellij")
+        .args([
+            "action",
+            "launch-or-focus-plugin",
+            "session-manager",
+            "--floating",
+            "--move-to-focused-tab",
+        ])
+        .status()
+        .context("Failed to launch session-manager plugin")?;
     if !status.success() {
-        anyhow::bail!("Error: Could not kill session '{}'", name);
+        anyhow::bail!("launch-or-focus-plugin session-manager failed");
+    }
+    Ok(())
+}
+
+pub fn dump_layout() -> Result<String> {
+    let output = Command::new("zellij")
+        .args(["action", "dump-layout"])
+        .output()
+        .context("Failed to dump zellij layout")?;
+    if !output.status.success() {
+        anyhow::bail!("dump-layout failed");
+    }
+    Ok(String::from_utf8_lossy(&output.stdout).into_owned())
+}
+
+pub fn close_pane(pane_id: u32) -> Result<()> {
+    let status = Command::new("zellij")
+        .args(["action", "close-pane", "--pane-id", &pane_id.to_string()])
+        .status()
+        .context("Failed to close pane")?;
+    if !status.success() {
+        anyhow::bail!("close-pane failed for pane {}", pane_id);
+    }
+    Ok(())
+}
+
+pub fn run_floating_grave_switch(amber_exe: &std::path::Path) -> Result<()> {
+    let status = Command::new("zellij")
+        .arg("run")
+        .arg("--floating")
+        .arg("--close-on-exit")
+        .arg("--name")
+        .arg("Grave")
+        .arg("--")
+        .arg(amber_exe)
+        .arg("grave")
+        .arg("switch")
+        .status()
+        .context("Failed to spawn Grave switch pane")?;
+    if !status.success() {
+        anyhow::bail!("zellij run Grave switch failed");
     }
     Ok(())
 }
