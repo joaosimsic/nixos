@@ -33,7 +33,10 @@ fn main() -> anyhow::Result<()> {
         Commands::Sync => commands::sync::run(),
         Commands::Status => commands::sync::status(),
         Commands::Grave => {
-            commands::grave::run();
+            if let Err(e) = commands::grave::run() {
+                eprintln!("Grave Error: {}", e);
+                std::process::exit(1);
+            }
             Ok(())
         }
     }

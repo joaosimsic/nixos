@@ -1,3 +1,4 @@
+use anyhow::{Context, Result};
 use std::process::Command;
 
 #[derive(Debug, Clone)]
@@ -33,17 +34,38 @@ fn parse_name(line: &str) -> String {
         .to_string()
 }
 
-pub fn kill_session(name: &str) {
+pub fn attach_session(name: &str) -> Result<()> {
+    Command::new("zellij")
+        .args(["attach", name])
+        .status()
+        .context(format!("Failed to attach to session '{}'", name))?;
+    Ok(())
+}
+
+pub fn switch_session(name: &str) -> Result<()> {
+    Command::new("zellij")
+        .args(["action", "switch-session", name])
+        .status()
+        .context(format!("Failed to switch to session '{}'", name))?;
+    Ok(())
+}
+
+pub fn delete_session_force(name: &str) -> Result<()> {
+    Command::new("zellij")
+        .args(["delete-session", "--force", name])
+        .status()
+        .context(format!("Failed to force delete session '{}'", name))?;
+    Ok(())
+}
+
+pub fn kill_session(name: &str) -> Result<()> {
     let status = Command::new("zellij")
         .args(["kill-session", name])
         .status()
-        .expect("Failed to kill session");
+        .context("Failed to kill session")?;
 
     if !status.success() {
-        eprintln!("Error: Could not kill session '{}'", name);
+        anyhow::bail!("Error: Could not kill session '{}'", name);
     }
-}
-
-pub fn attach_session(name: &str) {
-    let _ = Command::new("zellij").args(["attach", name]).status();
+    Ok(())
 }
