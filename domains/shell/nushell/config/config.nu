@@ -112,7 +112,7 @@ $env.config = {
             modifier: control
             keycode: char_g
             mode: [emacs, vi_normal, vi_insert]
-            event: { send: executehostcommand, cmd: "nu -c 'use ~/.config/nushell/scripts/grave.nu; grave'" }
+            event: { send: executehostcommand, cmd: "amber grave" }
         }
     ]
 }
