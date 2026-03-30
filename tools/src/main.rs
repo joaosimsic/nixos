@@ -24,7 +24,6 @@ enum Commands {
     Sync,
     Status,
     Grave {
-        /// Inside Zellij: open the picker instead of the session-manager plugin
         #[arg(long, short)]
         switch: bool,
         #[command(subcommand)]
@@ -34,33 +33,25 @@ enum Commands {
 
 #[derive(Subcommand)]
 enum GraveSubcommand {
-    /// Floating session switcher (used by Zellij keybindings)
     Switch,
-    /// Open or close the Grave switcher pane
     Toggle,
-    /// Delete exited sessions beyond the N most recent
     Clean {
         #[arg(long, short, default_value_t = 10)]
         keep: usize,
     },
-    /// Kill detached and exited sessions, keep N
     Kill {
         #[arg(long, short, default_value_t = 0)]
         keep: usize,
     },
-    /// List sessions (structured data)
     List,
-    /// Internal: newline-separated lines for fzf
     #[command(name = "list-lines")]
     ListLines {
         #[arg(long, short)]
         exclude_current: bool,
     },
-    /// Internal: delete session (from fzf)
     Delete {
         name: String,
     },
-    /// Internal: preview pane for fzf
     Preview {
         name: String,
     },

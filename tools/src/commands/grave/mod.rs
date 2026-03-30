@@ -14,7 +14,6 @@ use types::{SessionMetadata, SessionStatus};
 const MAX_EXITED_SESSIONS: usize = 10;
 const GRAVE_PID_FILE: &str = "/tmp/grave-pid";
 
-/// Text after `name │` in the picker (matches grave.nu `display`).
 pub fn build_session_display(details: &SessionMetadata) -> String {
     let cwd_branch = match &details.branch {
         Some(b) if !b.is_empty() => format!("{} ({})", details.cwd, b),
@@ -112,7 +111,6 @@ fn cleanup_old_sessions() -> Result<()> {
     Ok(())
 }
 
-/// Default `amber grave`: picker or plugin when inside Zellij (see grave.nu `main`).
 pub fn run_main(switch_flag: bool) -> Result<()> {
     cleanup_old_sessions()?;
 

@@ -1,8 +1,6 @@
 use std::fs;
 use std::path::{Path, PathBuf};
 
-/// Returns `~/.cache/zellij/<version>/session_info/<session_name>` when present.
-/// Prefers `contract_version_1` like the Nushell script.
 pub fn session_data_dir(session_name: &str) -> Option<PathBuf> {
     let home = std::env::var("HOME").ok()?;
     let zellij_cache = Path::new(&home).join(".cache/zellij");

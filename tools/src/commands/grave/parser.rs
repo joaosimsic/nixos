@@ -48,7 +48,6 @@ fn normalize_cwd_home(details: &mut SessionMetadata) {
     }
 }
 
-/// Matches the Nushell `fix-nix-paths` sed pipeline on raw KDL text.
 pub fn fix_nix_paths(session_name: &str) -> Result<()> {
     let Some(session_dir) = scanner::session_data_dir(session_name) else {
         return Ok(());

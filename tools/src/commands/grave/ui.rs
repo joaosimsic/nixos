@@ -110,7 +110,6 @@ pub fn run_picker(exclude_current: bool, fullscreen: bool) -> Result<Option<Stri
     Ok(name)
 }
 
-/// Quote for fzf `execute-silent(...)` when the path may contain spaces.
 fn shell_quote(s: &str) -> String {
     if s.is_empty() {
         return "''".into();
