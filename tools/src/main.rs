@@ -1,3 +1,4 @@
+mod amber_dir;
 mod commands;
 
 use clap::{Parser, Subcommand};

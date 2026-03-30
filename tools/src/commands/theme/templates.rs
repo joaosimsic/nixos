@@ -1,15 +1,38 @@
-use super::palette::Palette;
 use anyhow::{Context, Result};
+use serde_json::Value;
 use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
 
-pub fn generate_all(palette: &Palette, dotfiles: &Path) -> Result<()> {
-    let vars = palette.as_map();
-
+/// Renders every `*.template` under the amber tree using placeholders `{{KEY}}`.
+/// Variables come only from `palette.json` in the amber root (written by `palette_export` first).
+pub fn generate_all(dotfiles: &Path) -> Result<()> {
+    let vars = load_substitution_map(dotfiles)?;
     visit_dirs(dotfiles, &vars)?;
-
     Ok(())
+}
+
+fn load_substitution_map(dotfiles: &Path) -> Result<HashMap<String, String>> {
+    let path = dotfiles.join("palette.json");
+    let content = fs::read_to_string(&path).with_context(|| {
+        format!(
+            "missing {}; run palette export before template injection",
+            path.display()
+        )
+    })?;
+    let v: Value = serde_json::from_str(&content)
+        .with_context(|| format!("invalid JSON in {}", path.display()))?;
+    let obj = v
+        .as_object()
+        .with_context(|| format!("{} must be a JSON object", path.display()))?;
+
+    let mut vars = HashMap::new();
+    for (k, val) in obj {
+        if let Some(s) = val.as_str() {
+            vars.insert(k.clone(), s.to_string());
+        }
+    }
+    Ok(vars)
 }
 
 fn visit_dirs(dir: &Path, vars: &HashMap<String, String>) -> Result<()> {

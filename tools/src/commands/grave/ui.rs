@@ -1,10 +1,58 @@
 use crate::commands::grave::parser;
 use anyhow::Result;
 use colored::*;
+use serde_json::Value;
 use std::io::IsTerminal;
 use std::io::Write;
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
+
+fn fzf_colors_main() -> String {
+    let path = match crate::amber_dir::palette_json_path() {
+        Ok(p) => p,
+        Err(_) => return fzf_colors_main_fallback(),
+    };
+    let Ok(raw) = std::fs::read_to_string(&path) else {
+        return fzf_colors_main_fallback();
+    };
+    let Ok(v) = serde_json::from_str::<Value>(&raw) else {
+        return fzf_colors_main_fallback();
+    };
+    let dim = v.get("DIM").and_then(|x| x.as_str()).unwrap_or("586e75");
+    let base = v.get("BASE").and_then(|x| x.as_str()).unwrap_or("586e75");
+    let black = v.get("BLACK").and_then(|x| x.as_str()).unwrap_or("073642");
+    let hl = v
+        .get("ERROR_BRIGHT")
+        .or_else(|| v.get("YELLOW_BRIGHT"))
+        .and_then(|x| x.as_str())
+        .unwrap_or("cb4b16");
+    format!(
+        "label:#{dim},border:#{dim},prompt:#{dim},fg+:#{black},bg+:#{base},hl:#{hl},hl+:#ffffff,separator:#{dim},pointer:#{dim}"
+    )
+}
+
+fn fzf_colors_main_fallback() -> String {
+    "label:#586e75,border:#586e75,prompt:#586e75,fg+:#073642,bg+:#586e75,hl:#cb4b16,hl+:#ffffff,separator:#586e75,pointer:#586e75".to_string()
+}
+
+fn fzf_colors_disabled() -> String {
+    let path = match crate::amber_dir::palette_json_path() {
+        Ok(p) => p,
+        Err(_) => return fzf_colors_disabled_fallback(),
+    };
+    let Ok(raw) = std::fs::read_to_string(&path) else {
+        return fzf_colors_disabled_fallback();
+    };
+    let Ok(v) = serde_json::from_str::<Value>(&raw) else {
+        return fzf_colors_disabled_fallback();
+    };
+    let dim = v.get("DIM").and_then(|x| x.as_str()).unwrap_or("586e75");
+    format!("label:#{dim},border:#{dim},fg:#{dim},fg+:#{dim},bg:-1,bg+:-1,gutter:-1,pointer:-1,header:#{dim}")
+}
+
+fn fzf_colors_disabled_fallback() -> String {
+    "label:#586e75,border:#586e75,fg:#586e75,fg+:#586e75,bg:-1,bg+:-1,gutter:-1,pointer:-1,header:#586e75".to_string()
+}
 
 fn amber_exe() -> PathBuf {
     std::env::current_exe().unwrap_or_else(|_| PathBuf::from("amber"))
@@ -34,9 +82,8 @@ pub fn run_picker(exclude_current: bool, fullscreen: bool) -> Result<Option<Stri
     );
     let preview_cmd = format!("{} grave preview {{1}}", shell_quote(&exe_str));
 
-    let colors = "label:#586e75,border:#586e75,prompt:#586e75,fg+:#073642,bg+:#586e75,hl:#cb4b16,hl+:#ffffff,separator:#586e75,pointer:#586e75";
-
     if lines.is_empty() {
+        let disabled_colors = fzf_colors_disabled();
         let mut child = Command::new("fzf")
             .arg("--disabled")
             .arg("--layout=reverse")
@@ -45,7 +92,7 @@ pub fn run_picker(exclude_current: bool, fullscreen: bool) -> Result<Option<Stri
             .arg(format!("--margin={}", margin))
             .arg("--no-info")
             .arg("--pointer=")
-            .arg("--color=label:#586e75,border:#586e75,fg:#586e75,fg+:#586e75,bg:-1,bg+:-1,gutter:-1,pointer:-1,header:#586e75")
+            .arg(format!("--color={}", disabled_colors))
             .arg("--header=  Esc: close")
             .arg("--bind=enter:abort,esc:abort")
             .stdin(Stdio::piped())
@@ -70,7 +117,7 @@ pub fn run_picker(exclude_current: bool, fullscreen: bool) -> Result<Option<Stri
         .arg("--prompt= ")
         .arg("--pointer=")
         .arg("--highlight-line")
-        .arg(format!("--color={}", colors))
+        .arg(format!("--color={}", fzf_colors_main()))
         .arg("--header=  Enter: switch │ ctrl-d: delete │ Esc: close")
         .arg("--header-border=line")
         .arg("--delimiter=│")

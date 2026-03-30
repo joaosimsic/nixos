@@ -1,4 +1,5 @@
 mod palette;
+mod palette_export;
 #[cfg(target_os = "linux")]
 mod reload;
 mod templates;
@@ -39,21 +40,18 @@ pub fn run(color: Option<String>, dry_run: bool) -> Result<()> {
         return Ok(());
     }
 
-    templates::generate_all(&palette, &dotfiles)?;
+    palette_export::write_palette_json(&dotfiles, &palette)?;
+    templates::generate_all(&dotfiles)?;
 
     #[cfg(target_os = "linux")]
-    reload::reload_all(&palette);
+    reload::reload_all(&palette, &dotfiles);
 
     println!("Done.");
     Ok(())
 }
 
 fn dotfiles_dir() -> Result<PathBuf> {
-    if let Ok(dir) = std::env::var("AMBER_DIR") {
-        return Ok(PathBuf::from(dir));
-    }
-    let home = std::env::var("HOME").context("HOME not set")?;
-    Ok(PathBuf::from(home).join(".config/amber"))
+    crate::amber_dir::amber_dir()
 }
 
 fn read_theme(path: &PathBuf) -> Result<String> {

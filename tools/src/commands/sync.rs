@@ -6,7 +6,7 @@ use super::monitors::{generate_hyprland_monitors_conf, MonitorConfig};
 
 pub fn run() -> Result<()> {
     let home = std::env::var("HOME").context("HOME not set")?;
-    let amber_root = PathBuf::from(&home).join(".config/amber");
+    let amber_root = crate::amber_dir::amber_dir()?;
 
     let hostname = hostname::get()
         .context("Failed to get hostname")?
@@ -205,7 +205,7 @@ fn symlink_force(src: &Path, dest: &Path) -> Result<()> {
 
 pub fn status() -> Result<()> {
     let home = std::env::var("HOME").context("HOME not set")?;
-    let amber_root = PathBuf::from(&home).join(".config/amber");
+    let amber_root = crate::amber_dir::amber_dir()?;
 
     let hostname = hostname::get()
         .context("Failed to get hostname")?
