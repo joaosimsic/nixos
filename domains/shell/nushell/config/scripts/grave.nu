@@ -177,7 +177,7 @@ export def fzf-inner [--margin: string = "15%,15%" --exclude-current] {
     }
     
     if ($filtered | is-empty) {
-        let colors = "label:#eeeeee,border:#eeeeee,fg:#eeeeee,fg+:#eeeeee,bg:-1,bg+:-1,gutter:-1,pointer:-1,header:#eeeeee"
+        let colors = "label:#ff9944,border:#ff9944,fg:#ff9944,fg+:#ff9944,bg:-1,bg+:-1,gutter:-1,pointer:-1,header:#ff9944"
         "No sessions" | ^fzf --disabled --layout=reverse --border=sharp --border-label=" Grave " $"--margin=($margin)" --no-info --pointer="" $"--color=($colors)" --header="  Esc: close" --bind="enter:abort,esc:abort"
         return
     }
@@ -190,7 +190,7 @@ export def fzf-inner [--margin: string = "15%,15%" --exclude-current] {
     
     let delete_cmd = "execute-silent(nu -c 'use ~/.config/nushell/scripts/grave.nu *; delete-session \"{1}\"')+reload-sync(" + $lines_cmd + ")"
     
-    let colors = "label:#eeeeee,border:#eeeeee,prompt:#eeeeee,fg+:#0a0a0a,bg+:#eeeeee,hl:#ebebeb,hl+:#ffffff,separator:#eeeeee,pointer:#eeeeee"
+    let colors = "label:#ff9944,border:#ff9944,prompt:#ff9944,fg+:#0d0600,bg+:#ff9944,hl:#ffd7b5,hl+:#ffffff,separator:#ff9944,pointer:#ff9944"
     
     let lines = ($filtered | each { |s|
         $"($s.name) │ ($s.display)"

@@ -5,8 +5,8 @@ pub fn reload_all(palette: &Palette) {
     reload_hyprland(palette);
     reload_waybar();
     reload_mako();
-    reload_zellij();
     restart_ghostty();
+    reload_zellij();
 }
 
 fn reload_hyprland(p: &Palette) {
@@ -77,18 +77,7 @@ fn reload_zellij() {
         Err(_) => return,
     };
 
-    let cache_session_dirs: &[&str] = &[
-        "contract_version_1/session_info",
-        "0.44.0/session_info",
-        "0.43.1/session_info",
-    ];
-
-    for dir in cache_session_dirs {
-        let path = std::path::Path::new(&home).join(".cache/zellij").join(dir);
-        if path.exists() {
-            let _ = std::fs::remove_dir_all(&path);
-        }
-    }
+    clear_zellij_cache(&home);
 
     if std::env::var("ZELLIJ").is_err() {
         let _ = Command::new("pkill")
@@ -98,7 +87,31 @@ fn reload_zellij() {
             .status();
         println!("  zellij sessions cleared");
     } else {
-        println!("  zellij cache cleared (skipped pkill because we are inside zellij)");
+        if let Ok(session) = std::env::var("ZELLIJ_SESSION_NAME") {
+            let _ = std::fs::write("/tmp/amber-zellij-reattach", &session);
+            let _ = Command::new("zellij")
+                .args(["action", "quit"])
+                .stdout(Stdio::null())
+                .stderr(Stdio::null())
+                .status();
+        }
+        println!("  zellij restarting");
+    }
+}
+
+fn clear_zellij_cache(home: &str) {
+    let cache_dir = std::path::Path::new(home).join(".cache/zellij");
+    if !cache_dir.exists() {
+        return;
+    }
+
+    let permissions_backup = std::fs::read(cache_dir.join("permissions.kdl")).ok();
+
+    let _ = std::fs::remove_dir_all(&cache_dir);
+    let _ = std::fs::create_dir_all(&cache_dir);
+
+    if let Some(contents) = permissions_backup {
+        let _ = std::fs::write(cache_dir.join("permissions.kdl"), contents);
     }
 }
 
