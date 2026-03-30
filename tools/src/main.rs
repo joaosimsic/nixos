@@ -16,16 +16,14 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Set color theme
     Theme {
         color: Option<String>,
         #[arg(long)]
         dry_run: bool,
     },
-    /// Link repo configs + generate host-specific files
     Sync,
-    /// Show sync status of all configs
     Status,
+    Grave,
 }
 
 fn main() -> anyhow::Result<()> {
@@ -34,5 +32,9 @@ fn main() -> anyhow::Result<()> {
         Commands::Theme { color, dry_run } => commands::theme::run(color, dry_run),
         Commands::Sync => commands::sync::run(),
         Commands::Status => commands::sync::status(),
+        Commands::Grave => {
+            commands::grave::run();
+            Ok(())
+        }
     }
 }
