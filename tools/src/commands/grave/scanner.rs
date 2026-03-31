@@ -2,8 +2,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 pub fn session_data_dir(session_name: &str) -> Option<PathBuf> {
-    let home = std::env::var("HOME").ok()?;
-    let zellij_cache = Path::new(&home).join(".cache/zellij");
+    let zellij_cache = zellij_cache_dir()?;
     if !zellij_cache.is_dir() {
         return None;
     }
@@ -27,6 +26,15 @@ pub fn session_data_dir(session_name: &str) -> Option<PathBuf> {
             None
         }
     })
+}
+
+fn zellij_cache_dir() -> Option<PathBuf> {
+    if let Ok(cache_home) = std::env::var("XDG_CACHE_HOME") {
+        return Some(Path::new(&cache_home).join("zellij"));
+    }
+
+    let home = std::env::var("HOME").ok()?;
+    Some(Path::new(&home).join(".cache/zellij"))
 }
 
 pub fn resolve_path(path: &str) -> PathBuf {

@@ -6,13 +6,13 @@ pub mod zellij;
 
 use anyhow::Result;
 use regex::Regex;
-use std::path::Path;
+use std::collections::HashMap;
+use std::path::{Path, PathBuf};
 use std::time::Duration;
 
 use types::{SessionMetadata, SessionStatus};
 
 const MAX_EXITED_SESSIONS: usize = 10;
-const GRAVE_PID_FILE: &str = "/tmp/grave-pid";
 
 pub fn build_session_display(details: &SessionMetadata) -> String {
     let cwd_branch = match &details.branch {
@@ -58,8 +58,9 @@ pub fn list_display_lines(exclude_current: bool) -> Result<Vec<String>> {
     };
 
     let mut lines = Vec::new();
+    let mut branch_cache = HashMap::new();
     for s in filtered {
-        let details = parser::get_session_details(&s.name)?;
+        let details = parser::get_session_details_cached(&s.name, &mut branch_cache)?;
         let display = build_session_display(&details);
         lines.push(format!("{} │ {}", s.name, display));
     }
@@ -68,8 +69,9 @@ pub fn list_display_lines(exclude_current: bool) -> Result<Vec<String>> {
 
 pub fn list_sessions_print() -> Result<()> {
     let sessions = zellij::list_sessions()?;
+    let mut branch_cache = HashMap::new();
     for s in sessions {
-        let details = parser::get_session_details(&s.name)?;
+        let details = parser::get_session_details_cached(&s.name, &mut branch_cache)?;
         let display = build_session_display(&details);
         let status = match s.status {
             SessionStatus::Current => "current",
@@ -146,21 +148,21 @@ pub fn run_switch() -> Result<()> {
         anyhow::bail!("'amber grave switch' must run inside a zellij session");
     }
 
-    let pid_path = Path::new(GRAVE_PID_FILE);
+    let pid_path = grave_pid_path();
     if pid_path.exists() {
-        if let Ok(pid_str) = std::fs::read_to_string(pid_path) {
+        if let Ok(pid_str) = std::fs::read_to_string(&pid_path) {
             let pid = pid_str.trim();
             if !pid.is_empty() && process_looks_like_grave_switch(pid) {
                 let _ = std::process::Command::new("kill").arg(pid).status();
             }
         }
-        let _ = std::fs::remove_file(pid_path);
+        let _ = std::fs::remove_file(&pid_path);
         std::process::exit(0);
     }
 
-    std::fs::write(pid_path, format!("{}", std::process::id()))?;
+    std::fs::write(&pid_path, format!("{}", std::process::id()))?;
     let result = ui::run_picker(true, true);
-    let _ = std::fs::remove_file(pid_path);
+    let _ = std::fs::remove_file(&pid_path);
 
     match result {
         Ok(Some(name)) if !name.is_empty() => {
@@ -266,10 +268,32 @@ pub fn print_preview(session_name: &str) -> Result<()> {
 }
 
 fn process_looks_like_grave_switch(pid: &str) -> bool {
+    let Ok(pid_num) = pid.parse::<u32>() else {
+        return false;
+    };
+    if pid_num == std::process::id() {
+        return false;
+    }
+
     let path = format!("/proc/{}/cmdline", pid);
     let Ok(bytes) = std::fs::read(path) else {
         return false;
     };
     let cmdline = String::from_utf8_lossy(&bytes).replace('\0', " ");
     cmdline.contains("grave") && cmdline.contains("switch")
+}
+
+fn grave_pid_path() -> PathBuf {
+    let pid_file_name = format!("amber-grave-switch-{}.pid", current_uid_tag());
+    if let Ok(runtime) = std::env::var("XDG_RUNTIME_DIR") {
+        return Path::new(&runtime).join(pid_file_name);
+    }
+    std::env::temp_dir().join(pid_file_name)
+}
+
+fn current_uid_tag() -> String {
+    std::env::var("UID")
+        .ok()
+        .filter(|v| !v.trim().is_empty())
+        .unwrap_or_else(|| "nouid".to_string())
 }

@@ -1,6 +1,7 @@
 use anyhow::{Context, Result};
 use kdl::{KdlDocument, KdlNode};
 use regex::Regex;
+use std::collections::HashMap;
 use std::fs;
 use std::process::Command;
 
@@ -8,6 +9,13 @@ use crate::commands::grave::scanner;
 use crate::commands::grave::types::SessionMetadata;
 
 pub fn get_session_details(session_name: &str) -> Result<SessionMetadata> {
+    get_session_details_cached(session_name, &mut HashMap::new())
+}
+
+pub fn get_session_details_cached(
+    session_name: &str,
+    branch_cache: &mut HashMap<String, Option<String>>,
+) -> Result<SessionMetadata> {
     let Some(session_dir) = scanner::session_data_dir(session_name) else {
         return Ok(SessionMetadata::new(session_name));
     };
@@ -30,7 +38,7 @@ pub fn get_session_details(session_name: &str) -> Result<SessionMetadata> {
         }
 
         if details.cwd != "unknown" {
-            details.branch = fetch_git_branch(&details.cwd);
+            details.branch = fetch_git_branch_cached(&details.cwd, branch_cache);
         }
     }
 
@@ -177,4 +185,18 @@ fn fetch_git_branch(cwd: &str) -> Option<String> {
         .ok()
         .filter(|out| out.status.success())
         .map(|out| String::from_utf8_lossy(&out.stdout).trim().to_string())
+}
+
+fn fetch_git_branch_cached(
+    cwd: &str,
+    branch_cache: &mut HashMap<String, Option<String>>,
+) -> Option<String> {
+    let key = scanner::resolve_path(cwd).to_string_lossy().into_owned();
+    if let Some(cached) = branch_cache.get(&key) {
+        return cached.clone();
+    }
+
+    let value = fetch_git_branch(cwd);
+    branch_cache.insert(key, value.clone());
+    value
 }
