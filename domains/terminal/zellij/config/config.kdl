@@ -146,7 +146,7 @@ keybinds clear-defaults=true {
         bind "Alt f" { ToggleFloatingPanes; }
         bind "Ctrl l" { SwitchToMode "locked"; }
         bind "Ctrl g" {
-            Run "nu" "--no-config-file" "-c" "use ~/.config/nushell/scripts/grave.nu; grave switch" {
+            Run "amber" "grave" "switch" {
                 floating true
                 close_on_exit true
                 name "Grave"

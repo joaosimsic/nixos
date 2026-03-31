@@ -37,20 +37,7 @@ $env.config = {
     hooks: {
         pre_prompt: [
             { ||
-                if (not ($env | get -o ZELLIJ | is-not-empty)) and ("/tmp/amber-zellij-reattach" | path exists) {
-                    let session = (open /tmp/amber-zellij-reattach | str trim)
-                    rm /tmp/amber-zellij-reattach
-                    do -i { ^pkill -x zellij }
-                    sleep 1sec
-                    let cache_dir = ($env.HOME | path join ".cache/zellij")
-                    let perms_path = ($cache_dir | path join "permissions.kdl")
-                    let perms = (do -i { open --raw $perms_path })
-                    do -i { rm -rf $cache_dir }
-                    mkdir $cache_dir
-                    if ($perms | is-not-empty) { $perms | save --raw $perms_path }
-                    ^clear
-                    ^zellij --session $session --layout default
-                }
+                do -i { ^amber grave reattach }
             }
         ]
         pre_execution: []

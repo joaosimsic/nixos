@@ -1,4 +1,5 @@
 use anyhow::{Context, Result};
+use std::path::{Path, PathBuf};
 use std::process::Command;
 
 use crate::commands::grave::types::{SessionInfo, SessionStatus};
@@ -138,4 +139,30 @@ pub fn run_floating_grave_switch(amber_exe: &std::path::Path) -> Result<()> {
         anyhow::bail!("zellij run Grave switch failed");
     }
     Ok(())
+}
+
+pub fn start_session_default(name: &str) -> Result<()> {
+    let status = Command::new("zellij")
+        .args(["--session", name, "--layout", "default"])
+        .status()
+        .context(format!("Failed to run zellij for session '{}'", name))?;
+    if !status.success() {
+        anyhow::bail!("zellij failed to start session '{}'", name);
+    }
+    Ok(())
+}
+
+pub fn reattach_marker_path() -> PathBuf {
+    let file_name = format!("amber-zellij-reattach-{}.txt", current_uid_tag());
+    if let Ok(runtime) = std::env::var("XDG_RUNTIME_DIR") {
+        return Path::new(&runtime).join(file_name);
+    }
+    std::env::temp_dir().join(file_name)
+}
+
+fn current_uid_tag() -> String {
+    std::env::var("UID")
+        .ok()
+        .filter(|v| !v.trim().is_empty())
+        .unwrap_or_else(|| "nouid".to_string())
 }

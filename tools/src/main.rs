@@ -35,6 +35,7 @@ enum Commands {
 #[derive(Subcommand)]
 enum GraveSubcommand {
     Switch,
+    Reattach,
     Toggle,
     Clean {
         #[arg(long, short, default_value_t = 10)]
@@ -69,6 +70,7 @@ fn main() -> anyhow::Result<()> {
             let r = match sub {
                 None => commands::grave::run_main(switch),
                 Some(GraveSubcommand::Switch) => commands::grave::run_switch(),
+                Some(GraveSubcommand::Reattach) => commands::grave::run_reattach(),
                 Some(GraveSubcommand::Toggle) => commands::grave::run_toggle(&exe),
                 Some(GraveSubcommand::Clean { keep }) => commands::grave::run_clean(keep),
                 Some(GraveSubcommand::Kill { keep }) => commands::grave::run_kill(keep),

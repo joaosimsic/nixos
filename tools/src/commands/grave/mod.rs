@@ -190,6 +190,30 @@ pub fn run_toggle(amber_exe: &Path) -> Result<()> {
     Ok(())
 }
 
+pub fn run_reattach() -> Result<()> {
+    if std::env::var("ZELLIJ").is_ok() {
+        return Ok(());
+    }
+
+    let marker = zellij::reattach_marker_path();
+    if !marker.exists() {
+        return Ok(());
+    }
+
+    let session = std::fs::read_to_string(&marker)
+        .unwrap_or_default()
+        .trim()
+        .to_string();
+    let _ = std::fs::remove_file(&marker);
+    if session.is_empty() {
+        return Ok(());
+    }
+
+    clear_zellij_cache_preserving_permissions();
+    zellij::start_session_default(&session)?;
+    Ok(())
+}
+
 pub fn run_clean(keep: usize) -> Result<()> {
     let sessions = zellij::list_sessions()?;
     let exited: Vec<_> = sessions
@@ -296,4 +320,29 @@ fn current_uid_tag() -> String {
         .ok()
         .filter(|v| !v.trim().is_empty())
         .unwrap_or_else(|| "nouid".to_string())
+}
+
+fn clear_zellij_cache_preserving_permissions() {
+    let cache_base = std::env::var("XDG_CACHE_HOME")
+        .ok()
+        .map(PathBuf::from)
+        .or_else(|| std::env::var("HOME").ok().map(|h| Path::new(&h).join(".cache")));
+    let Some(cache_home) = cache_base else {
+        return;
+    };
+
+    let cache_dir = cache_home.join("zellij");
+    if !cache_dir.exists() {
+        return;
+    }
+
+    let perms_path = cache_dir.join("permissions.kdl");
+    let permissions_backup = std::fs::read(&perms_path).ok();
+
+    let _ = std::fs::remove_dir_all(&cache_dir);
+    let _ = std::fs::create_dir_all(&cache_dir);
+
+    if let Some(contents) = permissions_backup {
+        let _ = std::fs::write(cache_dir.join("permissions.kdl"), contents);
+    }
 }

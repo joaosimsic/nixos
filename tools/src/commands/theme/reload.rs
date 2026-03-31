@@ -80,12 +80,7 @@ fn reload_mako() {
 }
 
 fn reload_zellij() {
-    let home = match std::env::var("HOME") {
-        Ok(h) => h,
-        Err(_) => return,
-    };
-
-    clear_zellij_cache(&home);
+    clear_zellij_cache();
 
     if std::env::var("ZELLIJ").is_err() {
         let _ = Command::new("pkill")
@@ -96,7 +91,8 @@ fn reload_zellij() {
         println!("  zellij sessions cleared");
     } else {
         if let Ok(session) = std::env::var("ZELLIJ_SESSION_NAME") {
-            let _ = std::fs::write("/tmp/amber-zellij-reattach", &session);
+            let marker = crate::commands::grave::zellij::reattach_marker_path();
+            let _ = std::fs::write(marker, &session);
             let _ = Command::new("zellij")
                 .args(["action", "quit"])
                 .stdout(Stdio::null())
@@ -107,8 +103,20 @@ fn reload_zellij() {
     }
 }
 
-fn clear_zellij_cache(home: &str) {
-    let cache_dir = std::path::Path::new(home).join(".cache/zellij");
+fn clear_zellij_cache() {
+    let cache_base = std::env::var("XDG_CACHE_HOME")
+        .ok()
+        .map(std::path::PathBuf::from)
+        .or_else(|| {
+            std::env::var("HOME")
+                .ok()
+                .map(|h| std::path::Path::new(&h).join(".cache"))
+        });
+    let Some(cache_home) = cache_base else {
+        return;
+    };
+
+    let cache_dir = cache_home.join("zellij");
     if !cache_dir.exists() {
         return;
     }
